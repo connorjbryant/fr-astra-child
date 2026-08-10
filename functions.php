@@ -8,24 +8,137 @@
  * @since 1.0.0
  */
 
-/**
- * Define Constants
- */
-define( 'CHILD_THEME_FR_ASTRA_CHILD_VERSION', '1.0.0' );
-
-/**
- * Enqueue styles
- */
-function child_enqueue_styles() {
-
-	wp_enqueue_style( 'fr-astra-child-theme-css', get_stylesheet_directory_uri() . '/style.css', array('astra-theme-css'), CHILD_THEME_FR_ASTRA_CHILD_VERSION, 'all' );
-
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
 }
 
-add_action( 'wp_enqueue_scripts', 'child_enqueue_styles', 15 );
+/*
+ * =========================================
+ * Constants
+ * =========================================
+ */
 
-/* General theme functionality */
+define(
+    'CHILD_THEME_FR_ASTRA_CHILD_VERSION',
+    '1.0.0'
+);
+
+define(
+    'FR_CHILD_DIR',
+    trailingslashit(
+        get_stylesheet_directory()
+    )
+);
+
+define(
+    'FR_CHILD_URI',
+    trailingslashit(
+        get_stylesheet_directory_uri()
+    )
+);
+
+
+/*
+ * =========================================
+ * Performance
+ * =========================================
+ */
+
 require_once FR_CHILD_DIR . 'inc/performance.php';
+
+/*
+ * =========================================
+ * Child Theme Styles
+ * =========================================
+ */
+
+function fr_enqueue_child_theme_styles() {
+
+    wp_enqueue_style(
+        'fr-astra-child-theme-css',
+        FR_CHILD_URI . 'style.css',
+        array(
+            'astra-theme-css',
+        ),
+        CHILD_THEME_FR_ASTRA_CHILD_VERSION,
+        'all'
+    );
+}
+
+add_action(
+    'wp_enqueue_scripts',
+    'fr_enqueue_child_theme_styles',
+    15
+);
+
+
+/*
+ * =========================================
+ * Custom CSS
+ * =========================================
+ */
+
+function fr_enqueue_custom_styles() {
+
+    $css_path =
+        FR_CHILD_DIR .
+        'assets/css/custom-style.css';
+
+    $version =
+        file_exists( $css_path )
+            ? filemtime( $css_path )
+            : CHILD_THEME_FR_ASTRA_CHILD_VERSION;
+
+    wp_enqueue_style(
+        'fr-custom-style',
+        FR_CHILD_URI .
+            'assets/css/custom-style.css',
+        array(),
+        $version,
+        'all'
+    );
+}
+
+add_action(
+    'wp_enqueue_scripts',
+    'fr_enqueue_custom_styles',
+    20
+);
+
+/*
+ * =========================================
+ * Custom JavaScript
+ * =========================================
+ */
+
+function fr_enqueue_custom_scripts() {
+
+    $js_path =
+        FR_CHILD_DIR .
+        'assets/js/custom-script.js';
+
+    $version =
+        file_exists( $js_path )
+            ? filemtime( $js_path )
+            : CHILD_THEME_FR_ASTRA_CHILD_VERSION;
+
+    wp_enqueue_script(
+        'fr-custom-script',
+        FR_CHILD_URI .
+            'assets/js/custom-script.js',
+        array(
+            'jquery',
+        ),
+        $version,
+        true
+    );
+}
+
+add_action(
+    'wp_enqueue_scripts',
+    'fr_enqueue_custom_scripts',
+    20
+);
 
 // Register a custom widget
 function register_custom_search_widget() {
@@ -1183,321 +1296,6 @@ add_filter('woocommerce_email_styles', function ($css) {
     ";
     return $css;
 });
-
-// 0) Tell Elementor not to print ANY Google Fonts (local or remote)
-// add_filter('elementor/frontend/print_google_fonts', '__return_false'); // official filter
-
-// 1) Late dequeues (after most things register/enqueue)
-add_action('wp_enqueue_scripts', function () {
-    if (is_admin() || is_customize_preview()) return;
-
-    // Known handles
-    foreach ([
-        'elementor-gf-local-prompt',
-        'elementor-gf-local-roboto',
-        'elementor-gf-local-robotoslab',
-        // add any other families you spot in your logs
-    ] as $h) {
-        wp_dequeue_style($h);
-        wp_deregister_style($h);
-    }
-
-    // Fallback by URL match
-    global $wp_styles;
-    if (!empty($wp_styles->registered)) {
-        foreach ($wp_styles->registered as $handle => $style) {
-            $src = $style->src ?? '';
-            if ($src && strpos($src, '/uploads/elementor/google-fonts/css/') !== false) {
-                if (preg_match('~/prompt(?:\.min)?\.css~i', $src)
-                    || preg_match('~/roboto(?:\.min)?\.css~i', $src)
-                    || preg_match('~/robotoslab(?:\.min)?\.css~i', $src)) {
-                    wp_dequeue_style($handle);
-                    wp_deregister_style($handle);
-                }
-            }
-        }
-    }
-}, 999);
-
-// 2) Extra safety: run again right before styles print
-add_action('wp_print_styles', function () {
-    global $wp_styles;
-    if (empty($wp_styles->queue)) return;
-
-    foreach ($wp_styles->queue as $handle) {
-        $src = $wp_styles->registered[$handle]->src ?? '';
-        if ($src && strpos($src, '/uploads/elementor/google-fonts/css/') !== false) {
-            if (strpos($src, 'prompt.css') !== false
-                || strpos($src, 'roboto.css') !== false
-                || strpos($src, 'robotoslab.css') !== false) {
-                wp_dequeue_style($handle);
-                wp_deregister_style($handle);
-            }
-        }
-    }
-}, 999);
-
-// 3) Last resort: strip the <link> tag if anything slips through (runs very late)
-add_filter('style_loader_tag', function ($html, $handle, $href) {
-    $is_elementor_font = (
-        $handle === 'elementor-gf-local-prompt' ||
-        $handle === 'elementor-gf-local-roboto' ||
-        $handle === 'elementor-gf-local-robotoslab' ||
-        (strpos($href, '/uploads/elementor/google-fonts/css/') !== false &&
-            (strpos($href, 'prompt.css') !== false ||
-             strpos($href, 'roboto.css') !== false ||
-             strpos($href, 'robotoslab.css') !== false))
-    );
-    return $is_elementor_font ? '' : $html;
-}, 9999, 3);
-
-// 4) (Optional) Log what's still in the queue for admins
-add_action('wp_print_styles', function () {
-    if (!current_user_can('administrator')) return;
-    global $wp_styles;
-    $dump = [];
-    foreach (($wp_styles->queue ?? []) as $h) {
-        $dump[$h] = $wp_styles->registered[$h]->src ?? '(no src)';
-    }
-    error_log('[Dequeue debug] styles about to print: ' . print_r($dump, true));
-}, 1000);
-
-// Last resort: Suppress Woolentor (specific pages)
-add_filter('style_loader_tag', function ($html, $handle, $href) {
-
-    // Block Woolentor CSS on homepage and specific pages
-    if (
-        ($handle === 'woolentor-widgets' || strpos($href, 'woolentor-widgets.css') !== false) &&
-        (is_front_page() || is_page(['parts-search', 'why-us', 'blogs', 'contact-us']))
-    ) {
-        return ''; // Block Woolentor CSS
-    }
-
-    return $html;
-}, 10, 3);
-
-/**
- * Flex Rock — Performance LITE (stable Slick + videos)
- * - Cap preconnects at ≤4 (Lighthouse)
- * - Give LCP image high priority
- * - Defer everything except: jQuery, wp-embed, Slick, MediaElement, Elementor frontend (minimal)
- * - Ensure Slick/MediaElement CSS are present
- * - Nudge Slick to re-measure once layout/iframes/videos are settled
- * - Keep Lite-YouTube OFF for stability (can re-enable later)
- */
-
-/* ---------------------------------
- * Helpers
- * --------------------------------- */
-function fr_is_request( $type ) {
-  switch ( $type ) {
-    case 'cartlike':
-      return function_exists('is_cart') && ( is_cart() || is_checkout() || is_account_page() );
-    case 'product':
-      return function_exists('is_product') && is_product();
-  }
-  return false;
-}
-
-/* ---------------------------------
- * Resource Hints (cap at 4)
- * --------------------------------- */
-add_filter('wp_resource_hints', function( $urls, $relation_type ){
-  if ( 'preconnect' !== $relation_type ) return $urls;
-  $keep = [
-    'https://www.googletagmanager.com',
-    'https://scripts.clarity.ms',
-    'https://googleads.g.doubleclick.net',
-    'https://www.youtube.com',
-  ];
-  $out = [];
-  foreach (array_unique($keep) as $origin) {
-    $out[] = ['href' => $origin, 'crossorigin' => 'anonymous'];
-  }
-  return $out;
-}, 20, 2);
-
-/* ---------------------------------
- * LCP image: fetchpriority=high (home/shop/front)
- * --------------------------------- */
-add_filter('wp_get_attachment_image_attributes', function( $attr, $attachment, $size ){
-  static $did_lcp = false;
-  if ( $did_lcp ) return $attr;
-  if ( is_front_page() || is_home() || is_shop() ) {
-    $attr['fetchpriority'] = 'high';
-    $attr['loading']       = 'eager';
-    $attr['decoding']      = 'async';
-    $did_lcp = true;
-  }
-  return $attr;
-}, 10, 3);
-
-/* ---------------------------------
- * Defer non-critical scripts (very small allowlist)
- * --------------------------------- */
-add_filter('script_loader_tag', function( $tag, $handle, $src ){
-    
-  // Do NOT mess with script loading on this page (admin-like tool page)
-  if ( is_page('inventory-adjust') || is_page(6645) ) {
-    // Also strip defer/async if something already added it
-    $tag = str_replace([' defer ', ' async '], ' ', $tag);
-    $tag = str_replace([' defer>', ' async>'], '>', $tag);
-    return $tag;
-  }
-  
-  if ( is_admin() ) return $tag;
-
-  $no_defer = [
-    // jQuery core
-    'jquery','jquery-core','jquery-migrate',
-    // WP oEmbed helpers (YouTube sizing etc.)
-    'wp-embed',
-    'wp-hooks',
-    'wp-i18n',
-    'wp-polyfill',
-    'wp-dom-ready',
-    'wp-element',
-    'wp-components',
-    'wp-api-fetch',
-    'wp-escape-html',
-    'wp-primitives',
-    // Slick
-    'slick','slick-js','slick-carousel','jquery-slick',
-    // MediaElement (WP video)
-    'mediaelement','wp-mediaelement','mejs',
-    // Minimal Elementor runtime needed on many pages
-    'elementor-frontend','imagesloaded',
-    // Our tiny boot script (added below)
-    'fr-lite-boot',
-  ];
-
-  if ( in_array($handle, $no_defer, true) ) {
-    // strip any async/defer a plugin added
-    $tag = str_replace([' defer ', ' async '], ' ', $tag);
-    $tag = str_replace([' defer>', ' async>'], '>', $tag);
-    return $tag;
-  }
-
-  // Everyone else: add defer
-  if ( strpos($tag, ' defer') === false && strpos($tag, ' async') === false ) {
-    $tag = str_replace('<script ', '<script defer ', $tag);
-  }
-  return $tag;
-}, 10, 3);
-
-/* ---------------------------------
- * Force only the bare essentials to the HEAD (group 0)
- * (keeps Slick/MEJS ready before widgets touch them)
- * --------------------------------- */
-add_action('wp_default_scripts', function( $wp_scripts ){
-  if ( is_admin() ) return;
-
-  foreach ( ['jquery-core','jquery-migrate','jquery','wp-embed','mediaelement','wp-mediaelement','mejs','slick','slick-js','slick-carousel','jquery-slick','elementor-frontend'] as $h ) {
-    if ( isset($wp_scripts->registered[$h]) ) {
-      $wp_scripts->registered[$h]->extra['group'] = 0; // header
-    }
-  }
-
-  // Ensure Slick depends on jQuery (some bundles forget)
-  foreach ( ['slick','slick-js','slick-carousel','jquery-slick'] as $h ) {
-    if ( isset($wp_scripts->registered[$h]) ) {
-      $deps = (array) $wp_scripts->registered[$h]->deps;
-      if ( ! in_array('jquery', $deps, true) ) {
-        $deps[] = 'jquery';
-        $wp_scripts->registered[$h]->deps = $deps;
-      }
-    }
-  }
-}, 9);
-
-/* ---------------------------------
- * Ensure CSS for Slick & MediaElement present
- * (prevents “all slides printed” look)
- * --------------------------------- */
-add_action('wp_enqueue_scripts', function(){
-  if ( is_admin() ) return;
-
-  if ( wp_style_is('wp-mediaelement', 'registered') ) wp_enqueue_style('wp-mediaelement');
-  if ( wp_style_is('mediaelement', 'registered') )    wp_enqueue_style('mediaelement');
-
-  foreach ( ['slick','slick-css','slick-theme'] as $h ) {
-    if ( wp_style_is($h, 'registered') ) wp_enqueue_style($h);
-  }
-}, 20);
-
-/* ---------------------------------
- * Trim heavy libs globally where safe
- * --------------------------------- */
-add_action('wp_enqueue_scripts', function(){
-  if ( is_admin() ) return;
-
-  // Only load Photoswipe on product pages
-  if ( ! fr_is_request('product') ) {
-    wp_dequeue_script('photoswipe');
-    wp_dequeue_script('photoswipe-ui-default');
-    wp_dequeue_style('photoswipe');
-    wp_dequeue_style('photoswipe-default-skin');
-  }
-
-  wp_dequeue_script('googlesitekit-widgets'); // dashboard widgets not needed on frontend
-}, 99);
-
-/* ---------------------------------
- * Tiny boot: after DOM/iframes/videos settle, ask Slick to re-measure
- * (does NOT initialize carousels—assumes theme/plugin does that)
- * --------------------------------- */
-add_action('wp_enqueue_scripts', function(){
-  if ( is_admin() ) return;
-
-  $deps = ['jquery'];
-  foreach ( ['slick','slick-js','slick-carousel','jquery-slick'] as $h ) {
-    if ( wp_script_is($h, 'registered') ) $deps[] = $h;
-  }
-  if ( wp_script_is('elementor-frontend','registered') ) $deps[] = 'elementor-frontend';
-
-  wp_register_script(
-    'fr-lite-boot',
-    false,
-    array_unique($deps),
-    '1.0.0',
-    true
-  );
-
-  $boot = <<<JS
-(function(){
-  if (window.__frLiteBoot) return; window.__frLiteBoot = 1;
-  function refresh(){
-    if (!window.jQuery) return;
-    jQuery('.js-slick,.slick-initialized').each(function(){
-      var \$c = jQuery(this);
-      if (\$c.hasClass('slick-initialized')) {
-        try { \$c.slick('setPosition'); } catch(e){}
-        setTimeout(function(){ try{ \$c.slick('refresh'); }catch(e){} }, 0);
-      }
-    });
-  }
-  // DOM ready + window load (fonts/iframes/videos)
-  if (window.jQuery) jQuery(function(){ setTimeout(refresh, 0); });
-  window.addEventListener('load', function(){ setTimeout(refresh, 0); }, {once:true});
-
-  // If Elementor injects/activates widgets
-  if (window.elementorFrontend && window.elementorFrontend.hooks) {
-    elementorFrontend.hooks.addAction('frontend/element_ready/global', function(){ setTimeout(refresh, 0); });
-  }
-})();
-JS;
-
-  wp_add_inline_script('fr-lite-boot', $boot);
-  wp_enqueue_script('fr-lite-boot');
-}, 60);
-
-/* ---------------------------------
- * Keep Lite-YouTube OFF while stabilizing (can toggle later)
- * --------------------------------- */
-if ( ! defined('FR_LITE_YT') ) define('FR_LITE_YT', false);
-add_filter('embed_oembed_html', function( $html ){ return FR_LITE_YT ? $html : $html; }, 10, 1);
-
-add_filter('should_load_separate_core_block_assets', '__return_true');
 
 // Abandon cart → website report integration (REST)
 add_action('rest_api_init', function () {
