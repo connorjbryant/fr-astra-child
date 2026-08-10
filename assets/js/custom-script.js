@@ -1,7 +1,6 @@
 (function ($) {
 
     $(document).ready(function () {
-
         /*
          * =========================================
          * Mobile Navigation Layout
@@ -29,10 +28,9 @@
             $navSquare4.addClass("square-four");
         }
 
-
         /*
          * =========================================
-         * FRP Holiday Snow
+         * FRP Holiday Snow - Sticky Banner Option
          * =========================================
          */
 
@@ -74,7 +72,6 @@
             var flakeCount = 80;
 
             function spawn() {
-
                 var $flake = $(
                     '<div class="frp-snowflake" aria-hidden="true"></div>'
                 );
@@ -130,7 +127,6 @@
                 $layer.append($flake);
 
                 setTimeout(function () {
-
                     $flake.remove();
 
                     // Only continue if the snow layer still exists.
@@ -154,7 +150,6 @@
         // Header/banner can sometimes be injected late.
         setTimeout(startFrpSnow, 500);
         setTimeout(startFrpSnow, 1500);
-
 
         /*
          * =========================================
@@ -180,7 +175,6 @@
         $(".ht-product-image img")
             .addClass("has-crop");
 
-
         /*
          * =========================================
          * Spin Wheel / Tawk
@@ -194,7 +188,6 @@
         }
 
         function hideTawkWidget() {
-
             if (
                 window.Tawk_API &&
                 typeof window.Tawk_API.hideWidget === 'function'
@@ -212,14 +205,11 @@
         }
 
         function hideFloating() {
-
             $spinButton.hide();
-
             hideTawkWidget();
         }
 
         function showFloating() {
-
             if (wheelIsOpen()) {
                 return;
             }
@@ -231,15 +221,12 @@
         }
 
         function moveTawkLeftMobile() {
-
             if (window.innerWidth > 768) {
                 return;
             }
-
             // Tawk intentionally stays hidden.
             hideTawkWidget();
         }
-
 
         /*
          * Watch for Tawk injecting or replacing
@@ -247,7 +234,6 @@
          */
         var tawkObserver = new MutationObserver(
             function () {
-
                 if (
                     $('iframe[src*="tawk.to"]').length
                 ) {
@@ -266,7 +252,6 @@
         );
 
         setInterval(function () {
-
             if (wheelIsOpen()) {
 
                 $('body')
@@ -281,9 +266,7 @@
 
                 moveTawkLeftMobile();
             }
-
         }, 300);
-
 
         /*
          * Hide floating buttons while scrolling.
@@ -306,7 +289,6 @@
             }
         );
 
-
         /*
          * Hide floating buttons while interacting
          * with form controls / vehicle search.
@@ -321,12 +303,10 @@
             }
         );
 
-
         $(window).on(
             'resize load',
             moveTawkLeftMobile
         );
-
 
         /*
          * Hide Tawk immediately.
@@ -357,7 +337,6 @@
             3000
         );
 
-
         /*
          * =========================================
          * Google Search / Google Ads
@@ -374,13 +353,11 @@
         var DEBUG_LOG =
             false;
 
-
         /*
          * Check URL parameters first.
          * Fall back to Google referrer.
          */
         function getSearchQuery() {
-
             var urlParams =
                 new URLSearchParams(
                     window.location.search
@@ -394,7 +371,6 @@
                 return fromUrl;
             }
 
-
             var ref =
                 document.referrer;
 
@@ -405,9 +381,7 @@
                 return null;
             }
 
-
             try {
-
                 var refUrl =
                     new URL(ref);
 
@@ -418,17 +392,14 @@
             } catch (err) {
 
                 return null;
-
             }
         }
-
 
         /*
          * Determine whether the search looks
          * like a vehicle/parts search.
          */
         function looksLikeVehicleIntent(query) {
-
             if (!query) {
                 return false;
             }
@@ -494,7 +465,6 @@
 
             ];
 
-
             var partTerms = [
 
                 'sway bar',
@@ -533,7 +503,6 @@
 
             ];
 
-
             var hasVehicleTerm =
                 vehicleTerms.some(
                     function (term) {
@@ -544,7 +513,6 @@
 
                     }
                 );
-
 
             var hasPartTerm =
                 partTerms.some(
@@ -557,20 +525,17 @@
                     }
                 );
 
-
             return (
                 (hasYear && hasVehicleTerm) ||
                 (hasVehicleTerm && hasPartTerm)
             );
         }
 
-
         /*
          * Determine whether the redirect is
          * allowed to run.
          */
         function shouldRunRedirect() {
-
             if (
                 ONLY_RUN_ON_HOMEPAGE &&
                 window.location.pathname !== '/' &&
@@ -579,14 +544,12 @@
                 return false;
             }
 
-
             if (
                 window.location.pathname
                     .indexOf('/parts-search') !== -1
             ) {
                 return false;
             }
-
 
             if (
                 sessionStorage.getItem(
@@ -596,14 +559,12 @@
                 return false;
             }
 
-
             return true;
         }
 
 
         var query =
             getSearchQuery();
-
 
         if (
             shouldRunRedirect() &&
@@ -615,12 +576,10 @@
                 '1'
             );
 
-
             var destination =
                 PARTS_SEARCH_URL +
                 '?ref_search=' +
                 encodeURIComponent(query);
-
 
             if (DEBUG_LOG) {
 
@@ -628,14 +587,11 @@
                     'FRP redirecting to:',
                     destination
                 );
-
             }
-
 
             window.location.href =
                 destination;
         }
-
 
         /*
          * =========================================
@@ -646,19 +602,15 @@
         var frGpayFocusLogged =
             false;
 
-
         $(window).on(
             'blur',
             function () {
-
                 if (frGpayFocusLogged) {
                     return;
                 }
 
-
                 var active =
                     document.activeElement;
-
 
                 if (
                     active &&
@@ -668,10 +620,8 @@
                         'Secure express checkout frame'
                     ) !== -1
                 ) {
-
                     frGpayFocusLogged =
                         true;
-
 
                     navigator.sendBeacon(
                         '/wp-admin/admin-ajax.php',
@@ -696,7 +646,6 @@
         $('.rrr-notice-marker')
             .each(
                 function (index) {
-
                     /*
                      * Keep first notice.
                      * Hide duplicates.
@@ -712,7 +661,6 @@
                 }
             );
 
-
         /*
          * =========================================
          * GA4 Tracking
@@ -724,7 +672,6 @@
             'click',
             '.sticky-tab',
             function () {
-
                 if (
                     typeof window.gtag ===
                     'function'
@@ -743,7 +690,6 @@
                     );
 
                 }
-
             }
         );
 
@@ -755,7 +701,6 @@
             'click',
             '.js-frp-brand-track',
             function () {
-
                 var $link =
                     $(this);
 
@@ -769,12 +714,10 @@
                     $link.data('click-type') ||
                     'link';
 
-
                 if (
                     typeof window.gtag ===
                     'function'
                 ) {
-
                     window.gtag(
                         'event',
                         'parts_brand_click',
@@ -795,12 +738,9 @@
                                 document.title
                         }
                     );
-
                 }
-
             }
         );
-
     });
 
 })(jQuery);

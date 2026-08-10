@@ -112,14 +112,16 @@ add_action(
  */
 
 function fr_enqueue_custom_scripts() {
-
-    $js_path =
+    /*
+     * Main custom script.
+     */
+    $custom_js_path =
         FR_CHILD_DIR .
         'assets/js/custom-script.js';
 
-    $version =
-        file_exists( $js_path )
-            ? filemtime( $js_path )
+    $custom_js_version =
+        file_exists( $custom_js_path )
+            ? filemtime( $custom_js_path )
             : CHILD_THEME_FR_ASTRA_CHILD_VERSION;
 
     wp_enqueue_script(
@@ -129,9 +131,65 @@ function fr_enqueue_custom_scripts() {
         array(
             'jquery',
         ),
-        $version,
+        $custom_js_version,
         true
     );
+
+    /*
+     * WooCommerce custom script.
+     */
+    $woo_js_path =
+        FR_CHILD_DIR .
+        'assets/js/woocommerce-custom.js';
+
+    $woo_js_version =
+        file_exists( $woo_js_path )
+            ? filemtime( $woo_js_path )
+            : CHILD_THEME_FR_ASTRA_CHILD_VERSION;
+
+    wp_register_script(
+        'fr-woocommerce-custom',
+        FR_CHILD_URI .
+            'assets/js/woocommerce-custom.js',
+        array(
+            'jquery',
+        ),
+        $woo_js_version,
+        true
+    );
+
+    /*
+     * Pass WooCommerce values into JavaScript.
+     */
+    wp_localize_script(
+        'fr-woocommerce-custom',
+        'astra_wc_custom_params',
+        array(
+            'ajax_url' => admin_url(
+                'admin-ajax.php'
+            ),
+            'cart_url' => wc_get_cart_url(),
+        )
+    );
+
+    /*
+     * Only load the WooCommerce script
+     * where it is actually needed.
+     */
+    if (
+        class_exists( 'WooCommerce' )
+        && (
+            is_woocommerce()
+            || is_cart()
+            || is_checkout()
+            || is_product()
+            || is_page( 'shop-2' )
+        )
+    ) {
+        wp_enqueue_script(
+            'fr-woocommerce-custom'
+        );
+    }
 }
 
 add_action(

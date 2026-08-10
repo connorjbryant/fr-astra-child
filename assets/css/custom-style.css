@@ -322,6 +322,15 @@
   color: #0073aa !important;
 }
 
+.woocommerce[class*="rel-up-columns-"] .site-main div.product .related.products ul.products li.product, .woocommerce-page .site-main ul.products li.product {
+  justify-content: space-between !important;
+}
+
+.woocommerce-js ul.products li.product a img {
+  aspect-ratio: 1 / 1 !important;
+  object-fit: cover !important;
+}
+
 /* ==========================================================================
    02. Homepage & Product UI
    ========================================================================== */
