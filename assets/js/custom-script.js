@@ -11,7 +11,7 @@
         var $navSquare1 = $('[data-id="4eb77b7"]');
         var $navSquare2 = $('[data-id="65d3d3b"]');
         var $navSquare3 = $('[data-id="dc2ad9d"]');
-        var $navSquare4 = $('[data-id="dc2ad9d"]');
+        var $navSquare4 = $('[data-id="6b89966"]');
 
         if ($navSquare1.length) {
             $navSquare1.addClass("square-one");

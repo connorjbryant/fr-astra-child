@@ -713,23 +713,16 @@ button.toggle-fitments {
 }
 
 /* ==========================================================================
-   Mobile / Tablet Header & Navigation
+   Mobile Header / Navigation
    ========================================================================== */
 
-@media (max-width: 1024px) {
+@media (max-width: 767px) {
 
   /*
-   * FLEXBOX HEADER
+   * Main header row
    *
-   * Instead of putting the responsive header into a CSS grid,
-   * use normal flexbox ordering:
-   *
-   * [ Logo ] [ flexible space ] [ Search ] [ Cart ] [ Hamburger ]
-   *
-   * This makes spacing between the three right-side controls much
-   * easier to control and prevents the menu state from resizing them.
+   * [ Logo ] [ flexible space ] [ Search / Cart ] [ Menu ]
    */
-
   .elementor-section[data-id="f1a0799"],
   .elementor-section[data-id="f1a0799"] > .elementor-container {
     position: relative !important;
@@ -737,740 +730,118 @@ button.toggle-fitments {
   }
 
   .elementor-section[data-id="f1a0799"] > .elementor-container {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    align-items: center !important;
-
-    width: 100% !important;
-
-    margin: 0 !important;
+    display: grid !important;
+    grid-template-areas: "logo spacer actions menu";
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    align-items: center;
+    column-gap: 8px;
+    width: 100%;
   }
 
-
-  /*
-   * Reset Elementor's responsive column widths.
-   */
-  .elementor-section[data-id="f1a0799"]
-    > .elementor-container
-    > .elementor-column {
+  .elementor-section[data-id="f1a0799"] > .elementor-container > .elementor-column {
     width: auto !important;
     min-width: 0 !important;
     max-width: none !important;
   }
 
-
-  /* =========================================
-     Logo
-     ========================================= */
-
+  /* Logo */
   .square-one {
-    order: 1;
-
-    flex: 0 1 auto !important;
-
-    width: auto !important;
-    min-width: 0 !important;
-
+    grid-area: logo;
     position: relative;
     z-index: 2;
   }
 
   .square-one img {
-    width: auto !important;
-
-    /* max-width: clamp(90px, 28vw, 120px) !important; */
-
+    width: auto;
+    max-width: 120px;
     height: 35px !important;
   }
 
-
-  /* =========================================
-     Flexible Spacer
-     ========================================= */
-
+  /* Flexible spacer */
   .square-three {
-    order: 2;
-
-    flex: 1 1 auto !important;
-
-    width: auto !important;
-    min-width: 0 !important;
+    grid-area: spacer;
+    min-width: 0;
   }
 
-
-  /* =========================================
-     Search + Cart
-     ========================================= */
-
+  /* Search / cart */
   .square-four {
-    order: 3;
-
-    flex: 0 0 auto !important;
-
+    grid-area: actions;
     display: flex !important;
-    align-items: center !important;
-    justify-content: flex-end !important;
-
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
     width: auto !important;
-    min-width: 0 !important;
-    max-width: none !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    position: relative;
-    z-index: 2;
+    min-width: 0;
   }
 
-
-  /*
-   * Remove width restrictions from Elementor wrappers.
-   */
-  .square-four > .elementor-widget-wrap,
-  .square-four .elementor-widget-container,
-  .square-four .elementor-inner-section {
-    width: auto !important;
-    min-width: 0 !important;
-    max-width: none !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-
-  /*
-   * SEARCH ↔ CART
-   *
-   * This is intentionally a large gap.
-   * The goal is for search and cart to look like separate controls,
-   * not like two icons inside one button cluster.
-   */
-  .square-four
-    .elementor-inner-section
-    > .elementor-container {
+  .square-four .elementor-inner-section > .elementor-container {
     display: flex !important;
     flex-wrap: nowrap !important;
-    align-items: center !important;
-    justify-content: flex-end !important;
-
-    width: auto !important;
-    min-width: 0 !important;
-    max-width: none !important;
-
-    column-gap: 30px !important;
-    row-gap: 0 !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    width: auto;
+    min-width: 0;
   }
 
-
-  /*
-   * Prevent the individual search/cart widgets from stretching.
-   */
-  .square-four
-    .elementor-inner-section
-    > .elementor-container
-    > .elementor-column,
-  .square-four .elementor-widget {
-    flex: 0 0 auto !important;
-
-    width: auto !important;
-    min-width: 0 !important;
-    max-width: none !important;
-  }
-
-
-  /*
-   * Consistent tap target for the cart.
-   */
   .square-four .hfe-site-header-cart {
-    width: 40px !important;
-    min-width: 40px !important;
-    height: 40px !important;
-
-    display: grid !important;
-    place-items: center !important;
-
-    margin: 0 !important;
+    width: 40px;
+    min-width: 40px;
+    display: grid;
+    place-items: center;
   }
-
 
   .square-four .hfe-subtotal {
     display: none !important;
   }
 
-
-  /* =========================================
-     Hamburger
-     ========================================= */
-
+  /* Hamburger — always the far-right item */
   .square-two {
-    order: 4;
-
-    flex: 0 0 44px !important;
-
+    grid-area: menu;
     display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-
-    width: 44px !important;
-    min-width: 44px !important;
-    max-width: 44px !important;
+    align-items: center;
+    justify-content: center;
+    width: auto !important;
 
     /*
-     * CART ↔ HAMBURGER
-     *
-     * Separate this independently from the search/cart gap.
-     */
-    margin: 0 0 0 30px !important;
-
-    padding: 0 !important;
-
-    /*
-     * Keep HFE's dropdown out of the header sizing calculation.
+     * Important:
+     * Keep this column static so the dropdown can position
+     * itself against the full header container instead.
      */
     position: static !important;
-
     overflow: visible !important;
   }
-
 
   .square-two > .elementor-widget-wrap,
   .square-two .elementor-widget-container {
-    width: 44px !important;
-    min-width: 44px !important;
-    max-width: 44px !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
+    width: auto !important;
+    min-width: 0;
     position: static !important;
-
     overflow: visible !important;
   }
 
-
   .square-two .hfe-nav-menu__toggle {
-    width: 44px !important;
-    min-width: 44px !important;
-    max-width: 44px !important;
-
-    height: 44px !important;
-
-    display: grid !important;
-    place-items: center !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    display: grid;
+    place-items: center;
     position: relative !important;
-
     z-index: 100001;
-
+    margin: 0;
+    padding: 0;
     cursor: pointer;
   }
 
-
   /*
-   * Keep hamburger and X states the same size.
+   * Prevent the action column from covering the menu toggle.
    */
-  .square-two .hfe-nav-menu__toggle > *,
-  .square-two .hfe-nav-menu-icon,
-  .square-two .hfe-nav-menu-icon svg,
-  .square-two .hfe-nav-menu-icon i {
-    flex: 0 0 auto !important;
+  .square-four,
+  .square-four .elementor-widget-wrap,
+  .square-four .elementor-widget-container {
+    position: relative;
+    z-index: 2;
   }
-
-
-  /* =========================================
-     Responsive Navigation Typography
-     ========================================= */
-
-  .square-two nav.hfe-dropdown,
-  .square-two nav.hfe-dropdown a,
-  .square-two nav.hfe-dropdown span,
-  .square-two nav.hfe-dropdown .sub-arrow {
-    font-family: "Oxanium", sans-serif !important;
-  }
-
-
-  /* =========================================
-     Main Dropdown
-     ========================================= */
-
-  .square-two nav.hfe-dropdown ul.hfe-nav-menu {
-    width: 100% !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    background: #050505 !important;
-  }
-
-
-  .square-two nav.hfe-dropdown
-    ul.hfe-nav-menu
-    > li {
-    width: 100% !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    background: #050505 !important;
-
-    border-bottom:
-      1px solid rgba(255, 255, 255, 0.12) !important;
-  }
-
-
-  /* =========================================
-     Top-Level Links
-     ========================================= */
-
-  .square-two nav.hfe-dropdown
-    ul.hfe-nav-menu
-    > li
-    > a.hfe-menu-item {
-    display: flex !important;
-    align-items: center !important;
-
-    width: 100% !important;
-    min-height: 50px !important;
-
-    box-sizing: border-box !important;
-
-    margin: 0 !important;
-
-    padding: 15px 22px !important;
-
-    font-family: "Oxanium", sans-serif !important;
-    font-size: 16px !important;
-    font-weight: 700 !important;
-    line-height: 1.2 !important;
-
-    text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
-
-    color: #ffffff !important;
-    background: #050505 !important;
-
-    text-decoration: none !important;
-  }
-
-
-  /*
-   * Normal links.
-   */
-  .square-two nav.hfe-dropdown
-    ul.hfe-nav-menu
-    > li:not(.menu-item-has-children)
-    > a.hfe-menu-item:hover,
-
-  .square-two nav.hfe-dropdown
-    ul.hfe-nav-menu
-    > li:not(.menu-item-has-children)
-    > a.hfe-menu-item:focus {
-    color: #ffffff !important;
-    background: #ed1c24 !important;
-  }
-
-
-  .square-two nav.hfe-dropdown
-    ul.hfe-nav-menu
-    > li
-    > a.hfe-menu-item:visited {
-    color: #ffffff !important;
-  }
-
-
-  /* =========================================
-   Parent Items With Submenus
-   ========================================= */
-
-  /*
-  * Make parent links such as "Shop" look EXACTLY
-  * like every other top-level navigation link.
-  */
-  .square-two nav.hfe-dropdown
-    ul.hfe-nav-menu
-    > li.menu-item-has-children
-    > .hfe-has-submenu-container
-    > a.hfe-menu-item {
-
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-
-    width: 100% !important;
-    min-height: 50px !important;
-
-    box-sizing: border-box !important;
-
-    margin: 0 !important;
-    padding: 15px 22px !important;
-
-    font-family: "Oxanium", sans-serif !important;
-    font-size: 16px !important;
-    font-weight: 700 !important;
-    line-height: 1.2 !important;
-
-    text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
-
-    color: #ffffff !important;
-    background: #050505 !important;
-
-    text-decoration: none !important;
-  }
-
-
-  /*
-  * HFE adds an extra wrapper around links that
-  * have submenus. Make that wrapper behave like
-  * a normal full-width menu row.
-  */
-  .square-two nav.hfe-dropdown
-    ul.hfe-nav-menu
-    > li.menu-item-has-children
-    > .hfe-has-submenu-container {
-
-    display: block !important;
-
-    width: 100% !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    background: #050505 !important;
-  }
-
-
-  /*
-  * Submenu arrow.
-  *
-  * This should be the ONLY visible difference
-  * between Shop and a normal top-level link.
-  */
-  .square-two nav.hfe-dropdown
-    ul.hfe-nav-menu
-    > li.menu-item-has-children
-    > .hfe-has-submenu-container
-    > a.hfe-menu-item
-    .sub-arrow {
-
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-
-    flex: 0 0 auto !important;
-
-    margin-left: auto !important;
-    padding-left: 14px !important;
-
-    font-family: "Oxanium", sans-serif !important;
-    font-size: 16px !important;
-
-    line-height: 1 !important;
-
-    color: #ffffff !important;
-  }
-
-
-  /* =========================================
-    Parent Hover / Focus
-    ========================================= */
-
-  .square-two nav.hfe-dropdown
-    ul.hfe-nav-menu
-    > li.menu-item-has-children
-    > .hfe-has-submenu-container
-    > a.hfe-menu-item:hover,
-
-  .square-two nav.hfe-dropdown
-    ul.hfe-nav-menu
-    > li.menu-item-has-children
-    > .hfe-has-submenu-container
-    > a.hfe-menu-item:focus {
-
-    color: #ffffff !important;
-
-    background: #ed1c24 !important;
-  }
-
-
-  .square-two nav.hfe-dropdown
-    ul.hfe-nav-menu
-    > li.menu-item-has-children
-    > .hfe-has-submenu-container
-    > a.hfe-menu-item:hover
-    .sub-arrow,
-
-  .square-two nav.hfe-dropdown
-    ul.hfe-nav-menu
-    > li.menu-item-has-children
-    > .hfe-has-submenu-container
-    > a.hfe-menu-item:focus
-    .sub-arrow {
-
-    color: #ffffff !important;
-  }
-
-
-  /* =========================================
-    Parent Open State
-    ========================================= */
-
-  /*
-  * Keep an expanded parent looking like a normal
-  * navigation row instead of HFE turning it white.
-  */
-  .square-two nav.hfe-dropdown
-    ul.hfe-nav-menu
-    > li.menu-item-has-children
-    > .hfe-has-submenu-container
-    > a.hfe-menu-item.highlighted,
-
-  .square-two nav.hfe-dropdown
-    ul.hfe-nav-menu
-    > li.menu-item-has-children
-    > .hfe-has-submenu-container
-    > a.hfe-menu-item[aria-expanded="true"] {
-
-    color: #ffffff !important;
-
-    background: #050505 !important;
-  }
-
-
-  .square-two nav.hfe-dropdown
-    ul.hfe-nav-menu
-    > li.menu-item-has-children
-    > .hfe-has-submenu-container
-    > a.hfe-menu-item.highlighted
-    .sub-arrow,
-
-  .square-two nav.hfe-dropdown
-    ul.hfe-nav-menu
-    > li.menu-item-has-children
-    > .hfe-has-submenu-container
-    > a.hfe-menu-item[aria-expanded="true"]
-    .sub-arrow {
-
-    color: #ffffff !important;
-  }
-
-
-  /* =========================================
-     Current Top-Level Page
-     ========================================= */
-
-  .square-two nav.hfe-dropdown
-    ul.hfe-nav-menu
-    > li.current-menu-item:not(.menu-item-has-children)
-    > a.hfe-menu-item,
-
-  .square-two nav.hfe-dropdown
-    ul.hfe-nav-menu
-    > li.current_page_item:not(.menu-item-has-children)
-    > a.hfe-menu-item {
-    color: #ffffff !important;
-    background: #ed1c24 !important;
-  }
-
-
-  /* =========================================
-     Submenus
-     ========================================= */
-
-  .square-two nav.hfe-dropdown ul.sub-menu,
-  .square-two nav.hfe-dropdown ul.hfe-sub-menu {
-    position: static !important;
-
-    display: block !important;
-
-    width: 100% !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    background: #151515 !important;
-
-    border: 0 !important;
-    box-shadow: none !important;
-  }
-
-
-  .square-two nav.hfe-dropdown ul.sub-menu > li,
-  .square-two nav.hfe-dropdown ul.hfe-sub-menu > li {
-    width: 100% !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    background: #151515 !important;
-
-    border-bottom:
-      1px solid rgba(255, 255, 255, 0.1) !important;
-  }
-
-
-  /*
-   * SUBMENU LINKS
-   *
-   * These selectors intentionally target every HFE submenu-link
-   * class combination so plugin defaults cannot shrink the text
-   * or override the padding.
-   */
-  .square-two nav.hfe-dropdown
-    ul.sub-menu
-    > li
-    > a,
-
-  .square-two nav.hfe-dropdown
-    ul.hfe-sub-menu
-    > li
-    > a,
-
-  .square-two nav.hfe-dropdown
-    ul.sub-menu
-    > li
-    > a.hfe-sub-menu-item,
-
-  .square-two nav.hfe-dropdown
-    ul.hfe-sub-menu
-    > li
-    > a.hfe-sub-menu-item,
-
-  .square-two nav.hfe-dropdown
-    ul.sub-menu
-    > li
-    > a.hfe-menu-item,
-
-  .square-two nav.hfe-dropdown
-    ul.hfe-sub-menu
-    > li
-    > a.hfe-menu-item {
-    display: flex !important;
-    align-items: center !important;
-
-    width: 100% !important;
-    min-height: 48px !important;
-
-    box-sizing: border-box !important;
-
-    margin: 0 !important;
-
-    /*
-     * Noticeably nested, but still the same comfortable
-     * vertical spacing as the parent links.
-     */
-    padding: 14px 22px 14px 44px !important;
-
-    font-family: "Oxanium", sans-serif !important;
-    font-size: 15px !important;
-    font-weight: 600 !important;
-    line-height: 1.3 !important;
-
-    text-transform: uppercase !important;
-    letter-spacing: 0.4px !important;
-
-    color: #ffffff !important;
-    background: #151515 !important;
-
-    text-decoration: none !important;
-  }
-
-
-  /*
-   * Force nested text nodes/spans to use the same submenu typography.
-   */
-  .square-two nav.hfe-dropdown
-    ul.sub-menu
-    > li
-    > a
-    span,
-
-  .square-two nav.hfe-dropdown
-    ul.hfe-sub-menu
-    > li
-    > a
-    span,
-
-  .square-two nav.hfe-dropdown
-    a.hfe-sub-menu-item
-    span {
-    font-family: "Oxanium", sans-serif !important;
-    font-size: 15px !important;
-    font-weight: 600 !important;
-    line-height: 1.3 !important;
-
-    text-transform: uppercase !important;
-    letter-spacing: 0.4px !important;
-  }
-
-
-  .square-two nav.hfe-dropdown
-    ul.sub-menu
-    > li
-    > a:visited,
-
-  .square-two nav.hfe-dropdown
-    ul.hfe-sub-menu
-    > li
-    > a:visited {
-    color: #ffffff !important;
-    background: #151515 !important;
-  }
-
-
-  .square-two nav.hfe-dropdown
-    ul.sub-menu
-    > li
-    > a:hover,
-
-  .square-two nav.hfe-dropdown
-    ul.sub-menu
-    > li
-    > a:focus,
-
-  .square-two nav.hfe-dropdown
-    ul.hfe-sub-menu
-    > li
-    > a:hover,
-
-  .square-two nav.hfe-dropdown
-    ul.hfe-sub-menu
-    > li
-    > a:focus {
-    color: #ffffff !important;
-    background: #ed1c24 !important;
-  }
-
-
-  .square-two nav.hfe-dropdown
-    ul.sub-menu
-    > li.current-menu-item
-    > a,
-
-  .square-two nav.hfe-dropdown
-    ul.hfe-sub-menu
-    > li.current-menu-item
-    > a,
-
-  .square-two nav.hfe-dropdown
-    ul.sub-menu
-    > li.current_page_item
-    > a,
-
-  .square-two nav.hfe-dropdown
-    ul.hfe-sub-menu
-    > li.current_page_item
-    > a {
-    color: #ffffff !important;
-    background: #ed1c24 !important;
-  }
-
 }
 
 @media only screen and (min-width: 768px) and (max-width: 1400px) {
@@ -2199,10 +1570,8 @@ div.ywgc_have_code {
 }
 
 /* Dropdown styles */
-@media (min-width: 1025px) {
-  .hfe-nav-menu__layout-horizontal .hfe-nav-menu .sub-arrow {
-    margin-left: 0px !important;
-  }
+.hfe-nav-menu__layout-horizontal .hfe-nav-menu .sub-arrow {
+  margin-left: 0px !important;
 }
 
 @media (min-width: 1025px){

@@ -24,6 +24,9 @@ function child_enqueue_styles() {
 
 add_action( 'wp_enqueue_scripts', 'child_enqueue_styles', 15 );
 
+/* General theme functionality */
+require_once FR_CHILD_DIR . 'inc/performance.php';
+
 // Register a custom widget
 function register_custom_search_widget() {
     register_widget( 'Custom_Search_Widget' );
