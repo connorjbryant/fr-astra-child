@@ -61,11 +61,11 @@ function check_rrr_products_on_add_to_cart($cart_item_key, $product_id, $quantit
     }
 
     $sku_to_alt_map = [
-        'RRR-10003-KIT' => 4755,
-        'RRR-10006-KIT' => 4758,
-        'RRR-10008-KIT' => 4759,
-        'RRR-10014-KIT' => 4760,
-        'RRR-10015-KIT' => 4761,
+        'RRR-10003-KIT' => 4755, // RRR-10001-KIT
+        'RRR-10006-KIT' => 4758, // RRR-10005-KIT
+        'RRR-10008-KIT' => 4759, // RRR-10007-KIT
+        'RRR-10014-KIT' => 4760, // RRR-10009-KIT
+        'RRR-10015-KIT' => 4761, // RRR-10011-KIT
     ];
 
     $matched_skus = [];
