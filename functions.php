@@ -1074,31 +1074,31 @@ function fr_remove_ups_expedited_for_canada($rates, $package) {
     return $rates;
 }, 100, 2);*/
 
-add_filter('woocommerce_package_rates', function($rates, $package) {
-    error_log('=== PACKAGE DESTINATION ===');
-    error_log('Address: ' . ($package['destination']['address'] ?? 'EMPTY'));
-    error_log('Address 2: ' . ($package['destination']['address_2'] ?? ''));
-    error_log('City: ' . ($package['destination']['city'] ?? ''));
-    error_log('State: ' . ($package['destination']['state'] ?? ''));
-    error_log('Postcode: ' . ($package['destination']['postcode'] ?? ''));
-    error_log('Country: ' . ($package['destination']['country'] ?? ''));
-    return $rates;
-}, 5, 2);
+// add_filter('woocommerce_package_rates', function($rates, $package) {
+//     error_log('=== PACKAGE DESTINATION ===');
+//     error_log('Address: ' . ($package['destination']['address'] ?? 'EMPTY'));
+//     error_log('Address 2: ' . ($package['destination']['address_2'] ?? ''));
+//     error_log('City: ' . ($package['destination']['city'] ?? ''));
+//     error_log('State: ' . ($package['destination']['state'] ?? ''));
+//     error_log('Postcode: ' . ($package['destination']['postcode'] ?? ''));
+//     error_log('Country: ' . ($package['destination']['country'] ?? ''));
+//     return $rates;
+// }, 5, 2);
 
-add_filter('woocommerce_package_rates', function($rates, $package) {
-    error_log('=== SHIPPING RATES START ===');
-    foreach ($rates as $rate_id => $rate) {
-        $method_id = method_exists($rate, 'get_method_id')
-            ? $rate->get_method_id()
-            : (isset($rate->method_id) ? $rate->method_id : '');
-        $label = method_exists($rate, 'get_label')
-            ? $rate->get_label()
-            : (isset($rate->label) ? $rate->label : '');
-        error_log('RATE ID: ' . $rate_id . ' | METHOD: ' . $method_id . ' | LABEL: ' . $label);
-    }
-    error_log('=== SHIPPING RATES END ===');
-    return $rates;
-}, 9999, 2);
+// add_filter('woocommerce_package_rates', function($rates, $package) {
+//     error_log('=== SHIPPING RATES START ===');
+//     foreach ($rates as $rate_id => $rate) {
+//         $method_id = method_exists($rate, 'get_method_id')
+//             ? $rate->get_method_id()
+//             : (isset($rate->method_id) ? $rate->method_id : '');
+//         $label = method_exists($rate, 'get_label')
+//             ? $rate->get_label()
+//             : (isset($rate->label) ? $rate->label : '');
+//         error_log('RATE ID: ' . $rate_id . ' | METHOD: ' . $method_id . ' | LABEL: ' . $label);
+//     }
+//     error_log('=== SHIPPING RATES END ===');
+//     return $rates;
+// }, 9999, 2);
 
 /* SEO product categories */
 add_action('wp_footer', function () {
