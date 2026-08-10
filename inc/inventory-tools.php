@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 // If loose inventory ever gets off for whatever reason, run /wp-admin/?fr_run_nonwoo_backfill=1
 // after inputing desired date things went screwy to see what they should be if orders were not taking Components
 // out of inventory. Then - if that looks correct - run /wp-admin/?fr_run_nonwoo_backfill=1&live=1 to actually

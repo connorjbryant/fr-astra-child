@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 // Custom function to get unique makes for a product
 function get_unique_makes_for_product($product_id) {
     global $wpdb;

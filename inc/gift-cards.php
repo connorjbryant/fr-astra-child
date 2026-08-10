@@ -1,4 +1,9 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 // --- FRONT-END: Inject Custom Amount UI ---
 add_action( 'yith_ywgc_show_gift_card_amount_selection', function( $product ) {
     ?>

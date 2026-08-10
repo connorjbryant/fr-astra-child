@@ -164,6 +164,8 @@ function fr_enqueue_custom_scripts() {
 
     /*
      * Pass WooCommerce values into JavaScript.
+     * Future: Maybe wrap this in class_exists('WooCommerce')
+     * check in case WooCommerce is ever disabled
      */
     wp_localize_script(
         'fr-woocommerce-custom',

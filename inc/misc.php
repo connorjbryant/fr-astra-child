@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 /* Prize wheel custom label at checkout */
 add_filter( 'woocommerce_display_item_meta', 'rename_swr_free_meta_label', 10, 3 );
 function rename_swr_free_meta_label( $html, $item, $args ) {
@@ -268,7 +272,7 @@ add_action('rest_api_init', function () {
   ]);
 });
 
-/* When someone buys something and the email is triggered phone into GTM */
+/* When someone buys something and the email is triggered tell GTM */
 add_action('woocommerce_thankyou', function($order_id) {
     if (!$order_id) return;
 

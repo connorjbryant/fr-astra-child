@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 // Create custom roles if not already present
 add_action('init', function () {
     if (!get_role('employee')) {

@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 /* Custom rear radius rod WooCommerce notice */
 function conditionally_hide_checkout_fields_js() {
     $contains_rrr = false;
