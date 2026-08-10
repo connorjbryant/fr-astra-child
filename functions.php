@@ -30,6 +30,7 @@ function register_custom_search_widget() {
 }
 add_action( 'widgets_init', 'register_custom_search_widget' );
 
+/* Price check widget */
 class Custom_Search_Widget extends WP_Widget {
 
     function __construct() {
@@ -99,6 +100,7 @@ class Custom_Search_Widget extends WP_Widget {
     }
 }
 
+/* Custom rear radius rod WooCommerce notice */
 function conditionally_hide_checkout_fields_js() {
     $contains_rrr = false;
 
@@ -117,15 +119,15 @@ function conditionally_hide_checkout_fields_js() {
 
                 var tshirtFieldWrapper = $('#billing__field');      // Wrapper div
                 var tshirtInput = $('#billing_');                   // The input itself
-                var tshirtLabel = $('label[for="billing_"]');       // Your exact label
+                var tshirtLabel = $('label[for="billing_"]');
 
                 if (!hasRRR) {
                     tshirtFieldWrapper.hide();
                     tshirtInput.prop('required', false);
-                    tshirtLabel.hide(); // Optional: hide the label too
+                    tshirtLabel.hide();
                 } else {
                     tshirtFieldWrapper.show();
-                    tshirtInput.prop('required', false); // Still optional per your label
+                    tshirtInput.prop('required', false);
                     tshirtLabel.show();
                 }
             });
@@ -169,6 +171,7 @@ function enqueue_woocommerce_custom_script() {
 }
 add_action('wp_enqueue_scripts', 'enqueue_woocommerce_custom_script', 20);
 
+/* Misc CSS and JS additions */
 function register_woocommerce_custom_styles() {
     $css_path = get_template_directory() . '/inc/assets/css/woocommerce-custom.css';
     $css_uri = ASTRA_THEME_URI . 'inc/assets/css/woocommerce-custom.css';
@@ -198,28 +201,32 @@ function enqueue_woocommerce_custom_styles() {
 }
 add_action('wp_enqueue_scripts', 'enqueue_woocommerce_custom_styles', 20);
 
-// General custom css styles
+// General custom CSS styles
 function register_custom_theme_styles() {
-    $css_path = get_template_directory() . '/inc/assets/css/custom-style.css';
-    $css_uri = ASTRA_THEME_URI . 'inc/assets/css/custom-style.css';
-    $version = file_exists($css_path) ? filemtime($css_path) : ASTRA_THEME_VERSION;
-    wp_register_style(
-        'astra-custom-style',
+    $css_path = get_stylesheet_directory() . '/assets/css/custom-style.css';
+    $css_uri  = get_stylesheet_directory_uri() . '/assets/css/custom-style.css';
+
+    $version = file_exists($css_path) ? filemtime($css_path) : null;
+
+    wp_enqueue_style(
+        'fr-custom-style',
         $css_uri,
-        array(), // Dependencies, if any
+        array(),
         $version,
         'all'
     );
-    wp_enqueue_style('astra-custom-style');
 }
 add_action('wp_enqueue_scripts', 'register_custom_theme_styles', 20);
 
+// General custom JavaScript
 function enqueue_custom_theme_scripts() {
-    $js_path = get_template_directory() . '/inc/assets/js/custom-script.js';
-    $js_uri = ASTRA_THEME_URI . 'inc/assets/js/custom-script.js';
-    $version = file_exists($js_path) ? filemtime($js_path) : ASTRA_THEME_VERSION;
+    $js_path = get_stylesheet_directory() . '/assets/js/custom-script.js';
+    $js_uri  = get_stylesheet_directory_uri() . '/assets/js/custom-script.js';
+
+    $version = file_exists($js_path) ? filemtime($js_path) : null;
+
     wp_enqueue_script(
-        'astra-custom-script',
+        'fr-custom-script',
         $js_uri,
         array('jquery'),
         $version,
@@ -855,7 +862,7 @@ function fr_remove_ups_expedited_for_canada($rates, $package) {
     return $rates;
 }
 
-/** add_filter('woocommerce_package_rates', function ($rates, $package) {$keep = 'wc-shippo-shipping:ups_ground';
+/* add_filter('woocommerce_package_rates', function ($rates, $package) {$keep = 'wc-shippo-shipping:ups_ground';
     $has_ground = isset($rates[$keep]);
     foreach ($rates as $id => $rate) {
         $method_id = method_exists($rate,'get_method_id') ? $rate->get_method_id() : ($rate->method_id ?? '');
@@ -1093,132 +1100,6 @@ add_filter('woocommerce_package_rates', function($rates, $package) {
     return $rates;
 }, 9999, 2);
 
-/*add_filter('woocommerce_package_rates', 'frp_force_shippo_choice_when_available', 9999, 2);
-function frp_force_shippo_choice_when_available($rates, $package) {
-    if (!WC()->session || empty($rates) || !is_array($rates)) {
-        return $rates;
-    }
-
-    $shippo_rate_ids = [];
-    $preferred_rate_id = '';
-
-    foreach ($rates as $rate_id => $rate) {
-        if (strpos($rate_id, 'wc-shippo-shipping') !== false) {
-            $shippo_rate_ids[] = $rate_id;
-
-            if ($rate_id === 'wc-shippo-shipping:ups_ground') {
-                $preferred_rate_id = $rate_id;
-            }
-        }
-    }
-
-    if (empty($shippo_rate_ids)) {
-        return $rates;
-    }
-
-    if ($preferred_rate_id === '') {
-        $preferred_rate_id = reset($shippo_rate_ids);
-    }
-
-    $chosen_methods = WC()->session->get('chosen_shipping_methods');
-    if (!is_array($chosen_methods)) {
-        $chosen_methods = [];
-    }
-
-    $chosen_methods[0] = $preferred_rate_id;
-    WC()->session->set('chosen_shipping_methods', $chosen_methods);
-
-    return $rates;
-}*/
-
-// Add "Push to Shippo (create shipment)" to the Order actions dropdown
-/*add_filter('woocommerce_order_actions', function($actions){
-    $actions['push_to_shippo'] = 'Push to Shippo (create shipment)';
-    return $actions;
-});*/
-
-// Handle the action: create a Shippo Shipment from the order (no auto-buy)
-/*add_action('woocommerce_order_action_push_to_shippo', function($order){
-    $order_id = $order->get_id();
-
-    // --- SHIPPO TOKEN ---
-    $shippo_token = defined('SHIPPO_TOKEN') ? SHIPPO_TOKEN : '';
-
-    // --- FROM (store) address from Woo settings ---
-    $base = wc_get_base_location(); // ['country'=>'US','state'=>'IN'] etc.
-    $from = [
-        'name'     => get_bloginfo('name'),
-        'company'  => get_bloginfo('name'),
-        'street1'  => get_option('woocommerce_store_address'),
-        'street2'  => get_option('woocommerce_store_address_2'),
-        'city'     => get_option('woocommerce_store_city'),
-        'state'    => $base['state'],
-        'zip'      => get_option('woocommerce_store_postcode'),
-        'country'  => $base['country'],
-        'phone'    => get_option('admin_phone') ?: '000-000-0000',
-        'email'    => get_option('admin_email'),
-    ];
-
-    // --- TO (customer) address from order ---
-    $to = [
-        'name'     => trim($order->get_shipping_first_name().' '.$order->get_shipping_last_name()) ?: $order->get_formatted_billing_full_name(),
-        'street1'  => $order->get_shipping_address_1() ?: $order->get_billing_address_1(),
-        'street2'  => $order->get_shipping_address_2() ?: $order->get_billing_address_2(),
-        'city'     => $order->get_shipping_city()      ?: $order->get_billing_city(),
-        'state'    => $order->get_shipping_state()     ?: $order->get_billing_state(),
-        'zip'      => $order->get_shipping_postcode()  ?: $order->get_billing_postcode(),
-        'country'  => $order->get_shipping_country()   ?: $order->get_billing_country(),
-        'phone'    => $order->get_billing_phone(),
-        'email'    => $order->get_billing_email(),
-    ];
-
-    // --- Parcel: sum weights (fallback if missing) ---
-    $weight_lb = 0.0; $fallback_each_lb = 1.0;
-    $store_unit = get_option('woocommerce_weight_unit','kg'); // 'kg','g','lbs','oz'
-    foreach ($order->get_items() as $item) {
-        $p = $item->get_product(); if(!$p) continue;
-        $qty = max(1, (int)$item->get_quantity());
-        $w = (float)$p->get_weight();
-        if ($w <= 0) $w = $fallback_each_lb; // fallback per item
-        // convert to lb
-        if ($store_unit === 'kg') $w *= 2.20462;
-        if ($store_unit === 'g')  $w *= 0.00220462;
-        if ($store_unit === 'oz') $w *= 0.0625;
-        $weight_lb += $w * $qty;
-    }
-    if ($weight_lb <= 0) $weight_lb = $fallback_each_lb;
-
-    $parcel = [
-        'length' => '10', 'width' => '8', 'height' => '4',
-        'distance_unit' => 'in',
-        'weight' => number_format($weight_lb, 2, '.', ''),
-        'mass_unit' => 'lb',
-    ];
-
-    // Create shipment (sync so we also get rates back)
-    $req = [
-        'address_from' => $from,
-        'address_to'   => $to,
-        'parcels'      => [ $parcel ],
-        'async'        => false,
-        'metadata'     => 'WC Order #'.$order_id,
-    ];
-
-    $resp = wp_remote_post('https://api.goshippo.com/shipments/', [
-        'headers' => ['Authorization'=>'ShippoToken '.$shippo_token,'Content-Type'=>'application/json'],
-        'body'    => wp_json_encode($req),
-        'timeout' => 30,
-    ]);
-
-    if (is_wp_error($resp)) { $order->add_order_note('Shippo error: '.$resp->get_error_message()); return; }
-    $data = json_decode(wp_remote_retrieve_body($resp), true);
-
-    if (empty($data['object_id'])) { $order->add_order_note('Shippo: failed to create shipment.'); return; }
-
-    update_post_meta($order_id, '_shippo_shipment_id', $data['object_id']);
-    $order->add_order_note('Shippo shipment created: '.$data['object_id'].' (buy label in Shippo).');
-});*/
-
 /* SEO product categories */
 add_action('wp_footer', function () {
     if (!is_product_category()) return;
@@ -1299,13 +1180,6 @@ add_filter('woocommerce_email_styles', function ($css) {
     ";
     return $css;
 });
-
-/* Speed up page speed by removing WooComerce stuff until needed */
-/*add_action('wp_enqueue_scripts', function () {
-  if (!is_cart() && !is_checkout() && !is_customize_preview()) {
-    wp_dequeue_script('wc-cart-fragments');
-  }
-}, 11);*/
 
 // 0) Tell Elementor not to print ANY Google Fonts (local or remote)
 // add_filter('elementor/frontend/print_google_fonts', '__return_false'); // official filter
@@ -1664,38 +1538,6 @@ add_action('rest_api_init', function () {
     }
   ]);
 });
-
-/*<?php
-add_action('wp_enqueue_scripts', function () {
-    // Common handles used by plugins (you can add more if you find them)
-    foreach (['google-platform', 'googlejs-platform', 'gapi', 'google-identity', 'gsi-client'] as $h) {
-        wp_dequeue_script($h);
-        wp_deregister_script($h);
-    }
-}, 999);
-
-
- * Catch-all removal for any enqueued script whose src matches Google OAuth/Identity.
-
-add_action('wp_print_scripts', function () {
-    global $wp_scripts;
-    if (empty($wp_scripts) || empty($wp_scripts->queue)) return;
-
-    foreach ((array) $wp_scripts->queue as $handle) {
-        $src = $wp_scripts->registered[$handle]->src ?? '';
-        if (!$src) continue;
-        // Normalize full URL
-        $full = (0 === strpos($src, 'http')) ? $src : wp_normalize_path( site_url($src) );
-
-        if (
-            strpos($full, 'apis.google.com/js/platform.js') !== false ||
-            strpos($full, 'accounts.google.com/gsi/client') !== false
-        ) {
-            wp_dequeue_script($handle);
-            wp_deregister_script($handle);
-        }
-    }
-}, 0);*/
 
 // --- FRONT-END: Inject Custom Amount UI ---
 add_action( 'yith_ywgc_show_gift_card_amount_selection', function( $product ) {
