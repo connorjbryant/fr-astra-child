@@ -614,3 +614,12 @@ function fr_add_install_guides_to_order_email(
     </div>
     <?php
 }
+
+// Remove text below remove item icon - WooCommerce
+add_filter('woocommerce_cart_item_remove_link', function($link) {
+    return str_replace(
+        '</a>',
+        '<span style="display:block; width:70px; margin-top:4px; margin-left:-25px; font-size:12px; line-height:1.2; color:#686868; text-align:center; font-weight:400;">Remove</span></a>',
+        $link
+    );
+}, 10, 1);
