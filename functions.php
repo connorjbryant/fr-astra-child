@@ -911,8 +911,15 @@ function fr_preserve_posted_shipping_method($posted_data) {
 }
 
 /**
- * Only allow preferred shipping methods when live Shippo rates are available.
- * This affects WooCommerce rates before they are passed to checkout / Google Pay.
+ * Shipping priority:
+ *
+ * 1. If an applied coupon has "Allow free shipping" enabled,
+ *    return a custom $0 Free Shipping rate.
+ *
+ * 2. Otherwise, if preferred Shippo rates are available,
+ *    only show UPS Ground / Ground Saver.
+ *
+ * 3. Otherwise, allow fallback methods such as Flat Rate.
  */
 add_filter('woocommerce_package_rates', function ($rates, $package) {
 
@@ -920,27 +927,79 @@ add_filter('woocommerce_package_rates', function ($rates, $package) {
         return $rates;
     }
 
+    /*
+     * Check applied coupons directly.
+     */
+    $has_free_shipping_coupon = false;
+
+    if (function_exists('WC') && WC()->cart) {
+
+        $applied_coupons = WC()->cart->get_applied_coupons();
+
+        foreach ($applied_coupons as $coupon_code) {
+
+            $coupon = new WC_Coupon($coupon_code);
+
+            if ($coupon->get_free_shipping()) {
+                $has_free_shipping_coupon = true;
+                break;
+            }
+        }
+    }
+
+    /*
+     * If a valid applied coupon grants free shipping,
+     * bypass Shippo / Flat Rate and provide a $0 rate.
+     */
+    if ($has_free_shipping_coupon) {
+
+        $free_rate = new WC_Shipping_Rate(
+            'fr_coupon_free_shipping',
+            'Free Shipping',
+            0,
+            [],
+            'fr_coupon_free_shipping'
+        );
+
+        return [
+            'fr_coupon_free_shipping' => $free_rate,
+        ];
+    }
+
+    /*
+     * No free-shipping coupon:
+     * continue with normal Shippo preference logic.
+     */
     $preferred_rates = [];
 
     foreach ($rates as $rate_id => $rate) {
+
         $label = strtolower($rate->get_label());
 
-        if (
-            strpos($label, 'ups ground') !== false ||
-            strpos($label, 'ground saver') !== false
-        ) {
+        $is_ground =
+            strpos($label, 'ups ground') !== false &&
+            strpos($label, 'saver') === false;
+
+        $is_saver =
+            strpos($label, 'ground saver') !== false;
+
+        if ($is_ground || $is_saver) {
             $preferred_rates[$rate_id] = $rate;
         }
     }
 
-    /**
-     * Only filter if preferred Shippo rates exist.
-     * This prevents breaking fallback flat rate when Shippo is unavailable.
+    /*
+     * Shippo is working:
+     * only expose Ground / Ground Saver.
      */
     if (!empty($preferred_rates)) {
         return $preferred_rates;
     }
 
+    /*
+     * Shippo unavailable:
+     * allow fallback Flat Rate.
+     */
     return $rates;
 
 }, 100, 2);
