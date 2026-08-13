@@ -1453,8 +1453,20 @@ function fr_register_elementor_widgets( $widgets_manager ) {
 
     require_once get_stylesheet_directory() . '/inc/elementor/about-hero.php';
 
+    require_once get_stylesheet_directory() . '/inc/elementor/about-statement.php';
+
+    require_once get_stylesheet_directory() . '/inc/elementor/about-reviews.php';
+
     $widgets_manager->register(
         new \FR_About_Hero_Widget()
+    );
+
+    $widgets_manager->register(
+        new \FR_About_Statement_Widget()
+    );
+
+    $widgets_manager->register(
+        new \FR_About_Reviews_Widget()
     );
 }
 

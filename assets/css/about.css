@@ -1,18 +1,64 @@
 /* =========================================================
-   FLEX ROCK ABOUT HERO
+   FLEX ROCK ABOUT
    ========================================================= */
 
-.elementor-widget-fr-about-hero {
+
+/* =========================================================
+   SHARED
+   ========================================================= */
+
+.elementor-widget-fr-about-hero,
+.elementor-widget-fr-about-statement {
     width: 100%;
 }
 
-.elementor-widget-fr-about-hero > .elementor-widget-container {
+.elementor-widget-fr-about-hero > .elementor-widget-container,
+.elementor-widget-fr-about-statement > .elementor-widget-container {
     width: 100%;
+}
+
+
+/*
+ * Remove Elementor's default 10px column padding only
+ * when the column contains one of our About widgets.
+ */
+.elementor-column-gap-default
+> .elementor-column
+> .elementor-element-populated:has(
+    :is(
+        .elementor-widget-fr-about-hero,
+        .elementor-widget-fr-about-statement
+    )
+) {
+    padding: 0;
+}
+
+
+/*
+ * Shared About typography.
+ */
+.fr-about-hero,
+.fr-about-statement {
+    font-family: 'Oxanium', sans-serif;
 }
 
 
 /* =========================================================
-   MAIN HERO LAYOUT
+   ELEMENTOR ABOUT SECTION
+   ========================================================= */
+
+@media (min-width: 1025px) {
+
+    .fr-about-section.elementor-section.elementor-section-boxed
+    > .elementor-container {
+        width: 100%;
+        max-width: 1268px;
+    }
+}
+
+
+/* =========================================================
+   ABOUT HERO / SPLIT CONTENT
    ========================================================= */
 
 .fr-about-hero {
@@ -27,17 +73,17 @@
     padding: 0;
 
     background: #fff;
-    font-family: 'Oxanium', sans-serif;
 
     overflow: visible;
 }
 
 
 /* =========================================================
-   IMAGE POSITION
+   HERO IMAGE POSITION
    ========================================================= */
 
 /* Text left / image right */
+
 .fr-about-hero--image-right .fr-about-hero__content {
     grid-column: 1;
     grid-row: 1;
@@ -50,6 +96,7 @@
 
 
 /* Image left / text right */
+
 .fr-about-hero--image-left .fr-about-hero__image {
     grid-column: 1;
     grid-row: 1;
@@ -62,26 +109,25 @@
 
 
 /* =========================================================
-   CONTENT
+   HERO CONTENT
    ========================================================= */
 
 .fr-about-hero__content {
+    position: relative;
+    z-index: 1;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
-
-    position: relative;
-    z-index: 1;
 
     background: #fff;
 }
 
 
-/* Main heading */
 .fr-about-hero__content h1 {
     margin: 0;
 
-    font-family: 'Oxanium', sans-serif;
+    font-family: inherit;
     font-size: clamp(5rem, 8vw, 7.5rem);
     font-weight: 800;
     line-height: 0.82;
@@ -93,7 +139,6 @@
 }
 
 
-/* Red accent line */
 .fr-about-hero__rule {
     display: block;
 
@@ -106,21 +151,22 @@
 }
 
 
-/* Body copy */
 .fr-about-hero__text {
     width: 100%;
 
-    font-family: 'Oxanium', sans-serif;
-    font-size: 1rem;
+    font-family: inherit;
+    font-size: 1.25rem;
     line-height: 1.65;
 
     color: #222;
 }
 
+
 .fr-about-hero__text p {
     margin-top: 0;
     margin-bottom: 1.25rem;
 }
+
 
 .fr-about-hero__text p:last-child {
     margin-bottom: 0;
@@ -128,7 +174,7 @@
 
 
 /* =========================================================
-   IMAGE
+   HERO IMAGE
    ========================================================= */
 
 .fr-about-hero__image {
@@ -142,7 +188,6 @@
 }
 
 
-/* Image fills the entire image area */
 .fr-about-hero__image img {
     position: absolute;
     inset: 0;
@@ -158,41 +203,14 @@
     object-position: center;
 }
 
-.elementor-column-gap-default
-> .elementor-column
-> .elementor-element-populated:has(.elementor-widget-fr-about-hero) {
-    padding: 0;
-}
-
 
 /* =========================================================
-   DESKTOP
+   HERO DESKTOP
    ========================================================= */
 
 @media (min-width: 1025px) {
 
-    /* -----------------------------------------
-       Elementor parent width
-       ----------------------------------------- */
-
-    .fr-about-section.elementor-section.elementor-section-boxed
-    > .elementor-container {
-        width: 100%;
-        max-width: 1268px;
-    }
-
-
-    /* Remove Elementor column padding */
-    .fr-about-section .elementor-column-gap-default
-    > .elementor-column
-    > .elementor-element-populated {
-        padding: 0;
-    }
-
-
-    /* -----------------------------------------
-       Text padding
-       ----------------------------------------- */
+    /* Text spacing */
 
     .fr-about-hero--image-right .fr-about-hero__content {
         padding-right: clamp(3rem, 5vw, 6rem);
@@ -203,9 +221,7 @@
     }
 
 
-    /* -----------------------------------------
-       Image right breakout
-       ----------------------------------------- */
+    /* Image right breakout */
 
     .fr-about-hero--image-right .fr-about-hero__image {
         width: calc(
@@ -216,9 +232,7 @@
     }
 
 
-    /* -----------------------------------------
-       Image left breakout
-       ----------------------------------------- */
+    /* Image left breakout */
 
     .fr-about-hero--image-left .fr-about-hero__image {
         width: calc(
@@ -235,59 +249,36 @@
 
 
 /* =========================================================
-   TABLET
+   HERO TABLET
    ========================================================= */
 
 @media (max-width: 1024px) {
 
     .fr-about-hero {
         grid-template-columns: 48% 52%;
+
         min-height: 560px;
 
         overflow: hidden;
     }
 
 
-    /* Image right */
-    .fr-about-hero--image-right .fr-about-hero__content {
-        grid-column: 1;
-        grid-row: 1;
-    }
-
-    .fr-about-hero--image-right .fr-about-hero__image {
-        grid-column: 2;
-        grid-row: 1;
-    }
-
-
-    /* Image left */
-    .fr-about-hero--image-left .fr-about-hero__image {
-        grid-column: 1;
-        grid-row: 1;
-    }
-
-    .fr-about-hero--image-left .fr-about-hero__content {
-        grid-column: 2;
-        grid-row: 1;
-    }
-
-
-    /* Content */
     .fr-about-hero__content {
         padding: 4rem 3rem;
     }
+
 
     .fr-about-hero__content h1 {
         font-size: clamp(4.5rem, 8vw, 6rem);
         line-height: 0.84;
     }
 
+
     .fr-about-hero__rule {
         margin: 2rem 0;
     }
 
 
-    /* Image */
     .fr-about-hero__image {
         width: 100%;
         min-height: 560px;
@@ -298,7 +289,7 @@
 
 
 /* =========================================================
-   MOBILE
+   HERO MOBILE
    ========================================================= */
 
 @media (max-width: 767px) {
@@ -315,7 +306,7 @@
 
 
     /*
-     * Always show text first on mobile,
+     * Always keep content above the image on mobile,
      * regardless of desktop image position.
      */
     .fr-about-hero__content {
@@ -324,18 +315,19 @@
         width: 100%;
 
         padding: 4rem 1.5rem;
-
-        background: #fff;
     }
+
 
     .fr-about-hero__image {
         order: 2;
+
+        width: 100%;
+        height: 500px;
+        min-height: 500px;
+
+        margin-left: 0;
     }
 
-
-    /* -----------------------------------------
-       Heading
-       ----------------------------------------- */
 
     .fr-about-hero__content h1 {
         font-size: clamp(4rem, 20vw, 6rem);
@@ -343,42 +335,17 @@
     }
 
 
-    /* -----------------------------------------
-       Red rule
-       ----------------------------------------- */
-
     .fr-about-hero__rule {
-        width: 42px;
-        height: 4px;
-
         margin: 1.75rem 0;
     }
 
 
-    /* -----------------------------------------
-       Text
-       ----------------------------------------- */
-
     .fr-about-hero__text {
         width: 100%;
-        max-width: 100%;
 
-        font-size: 1rem;
-        line-height: 1.65;
+        font-size: 1.25rem;
     }
 
-
-    /* -----------------------------------------
-       Image
-       ----------------------------------------- */
-
-    .fr-about-hero__image {
-        width: 100%;
-        height: 500px;
-        min-height: 500px;
-
-        margin-left: 0;
-    }
 
     .fr-about-hero__image img {
         object-position: center;
@@ -387,7 +354,7 @@
 
 
 /* =========================================================
-   SMALL MOBILE
+   HERO SMALL MOBILE
    ========================================================= */
 
 @media (max-width: 480px) {
@@ -396,16 +363,311 @@
         padding: 3.5rem 1.25rem;
     }
 
+
     .fr-about-hero__content h1 {
         font-size: clamp(3.75rem, 21vw, 5rem);
     }
 
+
     .fr-about-hero__text {
-        font-size: 0.95rem;
+        font-size: 1rem;
     }
+
 
     .fr-about-hero__image {
         height: 420px;
         min-height: 420px;
+    }
+}
+
+
+/* =========================================================
+   ABOUT STATEMENT
+   ========================================================= */
+
+/*
+ * Black background goes full width.
+ * The quote/content inside stays aligned to our
+ * 1268px About page width.
+ */
+.fr-about-statement {
+    width: 100%;
+
+    padding: clamp(4rem, 6vw, 6rem) 2rem;
+
+    background: #000;
+}
+
+
+/* =========================================================
+   STATEMENT QUOTE
+   ========================================================= */
+
+.fr-about-statement__quote {
+    display: grid;
+    grid-template-columns: 70px minmax(0, 1fr);
+    align-items: start;
+    column-gap: clamp(1.5rem, 3vw, 3rem);
+
+    width: 100%;
+    max-width: 1268px;
+
+    margin: 0 auto;
+    padding: 0;
+
+    border: 0;
+}
+
+
+/* =========================================================
+   STATEMENT QUOTE MARK
+   ========================================================= */
+
+/*
+ * Explicitly place the quote in the first grid column,
+ * so it always stays to the LEFT of the statement.
+ */
+.fr-about-statement__mark {
+    grid-column: 1;
+    grid-row: 1;
+
+    display: block;
+
+    margin: 0;
+
+    font-family: inherit;
+    font-size: 5rem;
+    font-weight: 800;
+    line-height: 0.75;
+
+    color: #ed1c24;
+}
+
+
+/* =========================================================
+   STATEMENT TEXT
+   ========================================================= */
+
+.fr-about-statement__text {
+    grid-column: 2;
+    grid-row: 1;
+
+    width: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    font-family: inherit;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 600;
+    line-height: 1.25;
+
+    color: #fff;
+}
+
+
+/* =========================================================
+   STATEMENT MOBILE
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+    .fr-about-statement {
+        padding: 3rem 1.5rem;
+    }
+
+
+    .fr-about-statement__quote {
+        grid-template-columns: 45px minmax(0, 1fr);
+
+        column-gap: 1rem;
+    }
+
+
+    .fr-about-statement__mark {
+        font-size: 4rem;
+    }
+
+
+    .fr-about-statement__text {
+        font-size: clamp(1.5rem, 7vw, 2rem);
+        line-height: 1.3;
+    }
+}
+
+/* Overrides */
+.entry-content .fr-about-statement__text {
+    margin: 0;
+}
+
+/* =========================================================
+   ABOUT REVIEWS
+   ========================================================= */
+
+.fr-about-reviews {
+    width: 100%;
+    padding: clamp(4rem, 6vw, 6rem) 2rem;
+    background: #f5f5f5;
+    font-family: 'Oxanium', sans-serif;
+}
+
+.fr-about-reviews__inner {
+    width: 100%;
+    max-width: 1268px;
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   REVIEWS HEADER
+   ========================================================= */
+
+.fr-about-reviews__header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+}
+
+.fr-about-reviews__header h2 {
+    margin: 0;
+
+    font-family: inherit;
+    font-size: clamp(2rem, 3vw, 2.75rem);
+    font-weight: 800;
+    line-height: 1;
+
+    color: #000;
+}
+
+.fr-about-reviews__header-rule {
+    flex: 1;
+
+    height: 2px;
+
+    background: #d9d9d9;
+}
+
+
+/* =========================================================
+   REVIEWS GRID
+   ========================================================= */
+
+.fr-about-reviews__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+
+/* =========================================================
+   REVIEW CARD
+   ========================================================= */
+
+.fr-about-review {
+    display: flex;
+    flex-direction: column;
+
+    min-height: 270px;
+
+    padding: 2rem;
+
+    background: #fff;
+    border-top: 3px solid #ed1c24;
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.fr-about-review__mark {
+    display: block;
+
+    margin-bottom: 1.5rem;
+
+    font-size: 3.25rem;
+    font-weight: 800;
+    line-height: 0.6;
+
+    color: #ed1c24;
+}
+
+.fr-about-review__text {
+    flex: 1;
+
+    margin: 0;
+
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.6;
+
+    color: #555;
+}
+
+.fr-about-review__name {
+    margin: 2rem 0 0;
+
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+
+    text-transform: uppercase;
+
+    color: #111;
+}
+
+.fr-about-review__name::before {
+    content: '— ';
+}
+
+
+/* Override Astra paragraph margins */
+.fr-about-review .fr-about-review__text,
+.fr-about-review .fr-about-review__name {
+    margin-bottom: 0;
+}
+
+
+/* Remove Elementor column padding only here */
+.elementor-column-gap-default
+> .elementor-column
+> .elementor-element-populated:has(
+    .elementor-widget-fr-about-reviews
+) {
+    padding: 0;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1024px) {
+
+    .fr-about-reviews__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+    .fr-about-reviews {
+        padding: 3rem 1.5rem;
+    }
+
+    .fr-about-reviews__header {
+        gap: 1rem;
+    }
+
+    .fr-about-reviews__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .fr-about-review {
+        min-height: auto;
     }
 }
