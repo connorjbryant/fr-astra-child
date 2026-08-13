@@ -25,11 +25,13 @@ class FR_About_Reviews_Widget extends \Elementor\Widget_Base {
         return array( 'general' );
     }
 
-    public function get_style_depends() {
-        return array( 'fr-about-style' );
-    }
-
     protected function register_controls() {
+
+        /*
+         * =========================================
+         * Reviews
+         * =========================================
+         */
 
         $this->start_controls_section(
             'content_section',
@@ -41,6 +43,10 @@ class FR_About_Reviews_Widget extends \Elementor\Widget_Base {
             )
         );
 
+
+        /*
+         * Heading
+         */
         $this->add_control(
             'heading',
             array(
@@ -57,8 +63,16 @@ class FR_About_Reviews_Widget extends \Elementor\Widget_Base {
             )
         );
 
+
+        /*
+         * Review Repeater
+         */
         $repeater = new \Elementor\Repeater();
 
+
+        /*
+         * Review Text
+         */
         $repeater->add_control(
             'review',
             array(
@@ -66,11 +80,15 @@ class FR_About_Reviews_Widget extends \Elementor\Widget_Base {
                     'Review',
                     'fr-astra-child'
                 ),
-                'type'  => \Elementor\Controls_Manager::TEXTAREA,
-                'rows'  => 5,
+                'type' => \Elementor\Controls_Manager::TEXTAREA,
+                'rows' => 5,
             )
         );
 
+
+        /*
+         * Reviewer Name
+         */
         $repeater->add_control(
             'name',
             array(
@@ -78,10 +96,14 @@ class FR_About_Reviews_Widget extends \Elementor\Widget_Base {
                     'Name',
                     'fr-astra-child'
                 ),
-                'type'  => \Elementor\Controls_Manager::TEXT,
+                'type' => \Elementor\Controls_Manager::TEXT,
             )
         );
 
+
+        /*
+         * Reviews
+         */
         $this->add_control(
             'reviews',
             array(
@@ -92,19 +114,30 @@ class FR_About_Reviews_Widget extends \Elementor\Widget_Base {
                 'type'        => \Elementor\Controls_Manager::REPEATER,
                 'fields'      => $repeater->get_controls(),
                 'title_field' => '{{{ name }}}',
-                'default'     => array(
+
+                'default' => array(
+
                     array(
-                        'review' => 'Awesome upgrade for my RZR Pro XP4! Much better grease point than stock and best of all no more squeak.',
-                        'name'   => 'Kyle Cole',
+                        'review' =>
+                            'Awesome upgrade for my RZR Pro XP4! Much better grease point than stock and best of all no more squeak.',
+                        'name' =>
+                            'Kyle Cole',
                     ),
+
                     array(
-                        'review' => 'These things are awesome. Way better than factory and I am very impressed.',
-                        'name'   => 'Jeremy Ecott',
+                        'review' =>
+                            'These things are awesome. Way better than factory and I am very impressed.',
+                        'name' =>
+                            'Jeremy Ecott',
                     ),
+
                     array(
-                        'review' => 'Customer service was very professional and fast. Pricing was great.',
-                        'name'   => 'Dirk Hinton',
+                        'review' =>
+                            'Customer service was very professional and fast. Pricing was great.',
+                        'name' =>
+                            'Dirk Hinton',
                     ),
+
                 ),
             )
         );
@@ -112,30 +145,55 @@ class FR_About_Reviews_Widget extends \Elementor\Widget_Base {
         $this->end_controls_section();
     }
 
+
+    /*
+     * =========================================
+     * Render
+     * =========================================
+     */
+
     protected function render() {
 
-        $settings = $this->get_settings_for_display();
+        $settings =
+            $this->get_settings_for_display();
+
+        $reviews =
+            ! empty( $settings['reviews'] )
+                ? $settings['reviews']
+                : array();
 
         if (
             empty( $settings['heading'] )
-            && empty( $settings['reviews'] )
+            && empty( $reviews )
         ) {
             return;
         }
+
         ?>
 
         <section class="fr-about-reviews">
 
             <div class="fr-about-reviews__inner">
 
+
+                <?php
+                /*
+                 * =========================================
+                 * Heading
+                 * =========================================
+                 */
+                ?>
+
                 <?php if ( ! empty( $settings['heading'] ) ) : ?>
 
                     <header class="fr-about-reviews__header">
 
                         <h2>
-                            <?php echo esc_html(
+                            <?php
+                            echo esc_html(
                                 $settings['heading']
-                            ); ?>
+                            );
+                            ?>
                         </h2>
 
                         <span
@@ -147,48 +205,102 @@ class FR_About_Reviews_Widget extends \Elementor\Widget_Base {
 
                 <?php endif; ?>
 
-                <?php if ( ! empty( $settings['reviews'] ) ) : ?>
 
-                    <div class="fr-about-reviews__grid">
+                <?php
+                /*
+                 * =========================================
+                 * Reviews Slider
+                 * =========================================
+                 */
+                ?>
 
-                        <?php foreach ( $settings['reviews'] as $review ) : ?>
+                <?php if ( ! empty( $reviews ) ) : ?>
 
-                            <article class="fr-about-review">
+                    <div
+                        class="splide fr-about-reviews__slider"
+                        aria-label="<?php
+                            echo esc_attr__(
+                                'Rider Reviews',
+                                'fr-astra-child'
+                            );
+                        ?>"
+                    >
 
-                                <span
-                                    class="fr-about-review__mark"
-                                    aria-hidden="true"
-                                >
-                                    &ldquo;
-                                </span>
+                        <div class="splide__track">
 
-                                <?php if ( ! empty( $review['review'] ) ) : ?>
+                            <ul class="splide__list">
 
-                                    <p class="fr-about-review__text">
-                                        <?php echo esc_html(
-                                            $review['review']
-                                        ); ?>
-                                    </p>
+                                <?php foreach ( $reviews as $review ) : ?>
 
-                                <?php endif; ?>
+                                    <li class="splide__slide">
 
-                                <?php if ( ! empty( $review['name'] ) ) : ?>
+                                        <article class="fr-about-review">
 
-                                    <p class="fr-about-review__name">
-                                        <?php echo esc_html(
-                                            $review['name']
-                                        ); ?>
-                                    </p>
 
-                                <?php endif; ?>
+                                            <span
+                                                class="fr-about-review__mark"
+                                                aria-hidden="true"
+                                            >
+                                                &ldquo;
+                                            </span>
 
-                            </article>
 
-                        <?php endforeach; ?>
+                                            <?php
+                                            /*
+                                             * Review text
+                                             */
+                                            ?>
+
+                                            <?php if ( ! empty( $review['review'] ) ) : ?>
+
+                                                <p class="fr-about-review__text">
+
+                                                    <?php
+                                                    echo esc_html(
+                                                        $review['review']
+                                                    );
+                                                    ?>
+
+                                                </p>
+
+                                            <?php endif; ?>
+
+
+                                            <?php
+                                            /*
+                                             * Reviewer
+                                             */
+                                            ?>
+
+                                            <?php if ( ! empty( $review['name'] ) ) : ?>
+
+                                                <p class="fr-about-review__name">
+
+                                                    <?php
+                                                    echo esc_html(
+                                                        $review['name']
+                                                    );
+                                                    ?>
+
+                                                </p>
+
+                                            <?php endif; ?>
+
+
+                                        </article>
+
+                                    </li>
+
+                                <?php endforeach; ?>
+
+                            </ul>
+
+                        </div>
 
                     </div>
 
                 <?php endif; ?>
+
 
             </div>
 

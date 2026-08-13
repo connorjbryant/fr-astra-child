@@ -743,4 +743,108 @@
         );
     });
 
+    /*
+     * =========================================
+     * About Reviews Slider
+     * =========================================
+     */
+    
+    function initAboutReviewsSlider() {
+    
+        if (typeof Splide === 'undefined') {
+            console.error(
+                'FR Reviews: Splide library is not available.'
+            );
+    
+            return;
+        }
+    
+        var sliders =
+            document.querySelectorAll(
+                '.fr-about-reviews__slider'
+            );
+    
+        console.log(
+            'FR Reviews: sliders found:',
+            sliders.length
+        );
+    
+        sliders.forEach(function (slider) {
+    
+            if (
+                slider.classList.contains(
+                    'is-initialized'
+                )
+            ) {
+                return;
+            }
+    
+            var slides =
+                slider.querySelectorAll(
+                    '.splide__slide'
+                );
+    
+            console.log(
+                'FR Reviews: mounting slider with',
+                slides.length,
+                'slides'
+            );
+    
+            try {
+    
+                new Splide(
+                    slider,
+                    {
+                        type: 'loop',
+    
+                        perPage: 3,
+                        perMove: 1,
+    
+                        gap: '1.25rem',
+    
+                        autoplay: true,
+                        interval: 4500,
+    
+                        pauseOnHover: true,
+                        pauseOnFocus: true,
+    
+                        arrows: true,
+                        pagination: true,
+    
+                        breakpoints: {
+    
+                            1024: {
+                                perPage: 2
+                            },
+    
+                            767: {
+                                perPage: 1
+                            }
+    
+                        }
+                    }
+                ).mount();
+    
+                console.log(
+                    'FR Reviews: Splide mounted successfully.'
+                );
+    
+            } catch (error) {
+    
+                console.error(
+                    'FR Reviews: Splide mount failed:',
+                    error
+                );
+    
+            }
+    
+        });
+    }
+    
+    
+    $(document).ready(function () {
+    
+        initAboutReviewsSlider();
+    
+    });
 })(jQuery);

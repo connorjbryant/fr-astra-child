@@ -491,6 +491,10 @@ function fr_defer_noncritical_scripts(
         'elementor-frontend',
         'imagesloaded',
 
+        // Splide.
+        'fr-splide',
+        'fr-custom-script',
+
         // Flex Rock helper.
         'fr-lite-boot',
     );

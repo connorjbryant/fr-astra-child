@@ -167,6 +167,58 @@ add_action(
 
 /*
  * =========================================
+ * Splide Slider
+ * =========================================
+ */
+
+function fr_enqueue_splide_assets() {
+
+    $splide_css_path =
+        FR_CHILD_DIR .
+        'assets/vendor/splide/splide.min.css';
+
+    $splide_js_path =
+        FR_CHILD_DIR .
+        'assets/vendor/splide/splide.min.js';
+
+
+    /*
+     * Splide CSS
+     */
+    wp_enqueue_style(
+        'fr-splide',
+        FR_CHILD_URI .
+            'assets/vendor/splide/splide.min.css',
+        array(),
+        file_exists( $splide_css_path )
+            ? filemtime( $splide_css_path )
+            : '4.1.4'
+    );
+
+
+    /*
+     * Splide JavaScript
+     */
+    wp_enqueue_script(
+        'fr-splide',
+        FR_CHILD_URI .
+            'assets/vendor/splide/splide.min.js',
+        array(),
+        file_exists( $splide_js_path )
+            ? filemtime( $splide_js_path )
+            : '4.1.4',
+        true
+    );
+}
+
+add_action(
+    'wp_enqueue_scripts',
+    'fr_enqueue_splide_assets',
+    20
+);
+
+/*
+ * =========================================
  * Custom JavaScript
  * =========================================
  */
@@ -190,6 +242,7 @@ function fr_enqueue_custom_scripts() {
             'assets/js/custom-script.js',
         array(
             'jquery',
+            'fr-splide',
         ),
         $custom_js_version,
         true

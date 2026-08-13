@@ -495,25 +495,27 @@
     }
 }
 
-/* Overrides */
-.entry-content .fr-about-statement__text {
-    margin: 0;
-}
-
 /* =========================================================
    ABOUT REVIEWS
    ========================================================= */
 
 .fr-about-reviews {
     width: 100%;
-    padding: clamp(4rem, 6vw, 6rem) 2rem;
+
+    padding:
+        clamp(4rem, 6vw, 6rem)
+        2rem;
+
     background: #f5f5f5;
+
     font-family: 'Oxanium', sans-serif;
 }
+
 
 .fr-about-reviews__inner {
     width: 100%;
     max-width: 1268px;
+
     margin: 0 auto;
 }
 
@@ -525,20 +527,28 @@
 .fr-about-reviews__header {
     display: flex;
     align-items: center;
+
     gap: 2rem;
+
     margin-bottom: 2.5rem;
 }
+
 
 .fr-about-reviews__header h2 {
     margin: 0;
 
     font-family: inherit;
-    font-size: clamp(2rem, 3vw, 2.75rem);
+    font-size: clamp(
+        2rem,
+        3vw,
+        2.75rem
+    );
     font-weight: 800;
     line-height: 1;
 
     color: #000;
 }
+
 
 .fr-about-reviews__header-rule {
     flex: 1;
@@ -550,13 +560,43 @@
 
 
 /* =========================================================
-   REVIEWS GRID
+   REVIEWS SLIDER
    ========================================================= */
 
-.fr-about-reviews__grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.25rem;
+.fr-about-reviews__slider {
+    position: relative;
+
+    width: 100%;
+}
+
+
+/*
+ * Splide handles overflow here.
+ */
+.fr-about-reviews__slider
+.splide__track {
+    overflow: hidden;
+}
+
+
+/*
+ * Allow cards to stretch to equal height.
+ */
+.fr-about-reviews__slider
+.splide__list {
+    align-items: stretch;
+}
+
+
+/*
+ * Each Splide slide becomes a flex container so the
+ * card can stretch to the full available height.
+ */
+.fr-about-reviews__slider
+.splide__slide {
+    display: flex;
+
+    height: auto;
 }
 
 
@@ -568,27 +608,44 @@
     display: flex;
     flex-direction: column;
 
-    min-height: 270px;
+    width: 100%;
+    min-height: 290px;
 
     padding: 2rem;
 
     background: #fff;
-    border-top: 3px solid #ed1c24;
 
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    border-top:
+        3px solid
+        #ed1c24;
+
+    box-shadow:
+        0 2px 6px
+        rgba(0, 0, 0, 0.08);
 }
+
+
+/* =========================================================
+   REVIEW QUOTE MARK
+   ========================================================= */
 
 .fr-about-review__mark {
     display: block;
 
     margin-bottom: 1.5rem;
 
+    font-family: inherit;
     font-size: 3.25rem;
     font-weight: 800;
     line-height: 0.6;
 
     color: #ed1c24;
 }
+
+
+/* =========================================================
+   REVIEW TEXT
+   ========================================================= */
 
 .fr-about-review__text {
     flex: 1;
@@ -601,6 +658,11 @@
 
     color: #555;
 }
+
+
+/* =========================================================
+   REVIEW NAME
+   ========================================================= */
 
 .fr-about-review__name {
     margin: 2rem 0 0;
@@ -615,19 +677,109 @@
     color: #111;
 }
 
+
 .fr-about-review__name::before {
     content: '— ';
 }
 
 
-/* Override Astra paragraph margins */
-.fr-about-review .fr-about-review__text,
-.fr-about-review .fr-about-review__name {
+/* =========================================================
+   ASTRA OVERRIDES
+   ========================================================= */
+
+.fr-about-review
+.fr-about-review__text,
+.fr-about-review
+.fr-about-review__name {
     margin-bottom: 0;
 }
 
 
-/* Remove Elementor column padding only here */
+/* =========================================================
+   SPLIDE ARROWS
+   ========================================================= */
+
+.fr-about-reviews__slider
+.splide__arrow {
+    width: 42px;
+    height: 42px;
+
+    opacity: 1;
+
+    background: #000;
+}
+
+
+.fr-about-reviews__slider
+.splide__arrow:hover {
+    opacity: 0.85;
+}
+
+
+.fr-about-reviews__slider
+.splide__arrow svg {
+    fill: #fff;
+}
+
+
+/*
+ * Keep arrows just outside the cards on large screens.
+ */
+.fr-about-reviews__slider
+.splide__arrow--prev {
+    left: -1.25rem;
+}
+
+
+.fr-about-reviews__slider
+.splide__arrow--next {
+    right: -1.25rem;
+}
+
+
+/* =========================================================
+   SPLIDE PAGINATION
+   ========================================================= */
+
+.fr-about-reviews__slider
+.splide__pagination {
+    position: relative;
+    bottom: auto;
+
+    display: flex;
+
+    margin: 2rem 0 0;
+    padding: 0;
+}
+
+
+.fr-about-reviews__slider
+.splide__pagination__page {
+    width: 9px;
+    height: 9px;
+
+    margin: 4px;
+
+    opacity: 0.3;
+
+    background: #000;
+}
+
+
+.fr-about-reviews__slider
+.splide__pagination__page.is-active {
+    transform: scale(1.25);
+
+    opacity: 1;
+
+    background: #ed1c24;
+}
+
+
+/* =========================================================
+   REMOVE ELEMENTOR COLUMN PADDING
+   ========================================================= */
+
 .elementor-column-gap-default
 > .elementor-column
 > .elementor-element-populated:has(
@@ -643,8 +795,23 @@
 
 @media (max-width: 1024px) {
 
-    .fr-about-reviews__grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+    .fr-about-reviews__header {
+        gap: 1.5rem;
+    }
+
+
+    /*
+     * Keep arrows inside the slider at tablet sizes.
+     */
+    .fr-about-reviews__slider
+    .splide__arrow--prev {
+        left: 0.5rem;
+    }
+
+
+    .fr-about-reviews__slider
+    .splide__arrow--next {
+        right: 0.5rem;
     }
 }
 
@@ -656,18 +823,91 @@
 @media (max-width: 767px) {
 
     .fr-about-reviews {
-        padding: 3rem 1.5rem;
+        padding:
+            3rem
+            1.5rem;
     }
+
 
     .fr-about-reviews__header {
         gap: 1rem;
+
+        margin-bottom: 2rem;
     }
 
-    .fr-about-reviews__grid {
-        grid-template-columns: 1fr;
+
+    .fr-about-reviews__header h2 {
+        font-size: 2rem;
     }
+
+
+    /*
+     * JavaScript sets Splide to perPage: 1 here.
+     * CSS simply makes the individual card fit naturally.
+     */
+    .fr-about-review {
+        min-height: 300px;
+
+        padding: 1.75rem;
+    }
+
+
+    .fr-about-review__text {
+        font-size: 1rem;
+    }
+
+
+    /*
+     * On mobile keep navigation buttons comfortably
+     * inside the slider.
+     */
+    .fr-about-reviews__slider
+    .splide__arrow {
+        width: 38px;
+        height: 38px;
+    }
+
+
+    .fr-about-reviews__slider
+    .splide__arrow--prev {
+        left: 0.5rem;
+    }
+
+
+    .fr-about-reviews__slider
+    .splide__arrow--next {
+        right: 0.5rem;
+    }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    .fr-about-reviews {
+        padding:
+            2.5rem
+            1.25rem;
+    }
+
 
     .fr-about-review {
-        min-height: auto;
+        min-height: 280px;
     }
+}
+
+/* Overrides */
+.entry-content .fr-about-statement__text {
+    margin: 0;
+}
+
+/* Debug safeguard:
+   if Elementor fails to initialize Splide,
+   don't leave the entire reviews area invisible. */
+.elementor-editor-active
+.fr-about-reviews__slider:not(.is-initialized) {
+    visibility: visible;
 }
