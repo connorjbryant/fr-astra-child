@@ -53,6 +53,27 @@ require_once FR_CHILD_DIR . 'inc/misc.php';
 
 /*
  * =========================================
+ * Google Fonts - Oxanium
+ * =========================================
+ */
+
+function fr_enqueue_google_fonts() {
+
+    wp_enqueue_style(
+        'fr-google-fonts',
+        'https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700;800&display=swap',
+        array(),
+        null
+    );
+}
+
+add_action(
+    'wp_enqueue_scripts',
+    'fr_enqueue_google_fonts'
+);
+
+/*
+ * =========================================
  * Child Theme Styles
  * =========================================
  */
@@ -107,6 +128,41 @@ add_action(
     'wp_enqueue_scripts',
     'fr_enqueue_custom_styles',
     20
+);
+
+/*
+ * =========================================
+ * About Page CSS
+ * =========================================
+ */
+
+function fr_enqueue_about_styles() {
+
+    $css_path =
+        FR_CHILD_DIR .
+        'assets/css/about.css';
+
+    $version =
+        file_exists( $css_path )
+            ? filemtime( $css_path )
+            : CHILD_THEME_FR_ASTRA_CHILD_VERSION;
+
+    wp_enqueue_style(
+        'fr-about-style',
+        FR_CHILD_URI .
+            'assets/css/about.css',
+        array(
+            'fr-custom-style',
+        ),
+        $version,
+        'all'
+    );
+}
+
+add_action(
+    'wp_enqueue_scripts',
+    'fr_enqueue_about_styles',
+    25
 );
 
 /*
@@ -1392,3 +1448,17 @@ function frp_add_meta_pixel() {
     <!-- End Meta Pixel Code -->
     <?php
 }
+
+function fr_register_elementor_widgets( $widgets_manager ) {
+
+    require_once get_stylesheet_directory() . '/inc/elementor/about-hero.php';
+
+    $widgets_manager->register(
+        new \FR_About_Hero_Widget()
+    );
+}
+
+add_action(
+    'elementor/widgets/register',
+    'fr_register_elementor_widgets'
+);

@@ -1,0 +1,274 @@
+/* =========================================================
+   FLEX ROCK ABOUT HERO
+   ========================================================= */
+
+.elementor-widget-fr-about-hero {
+    width: 100%;
+}
+
+.elementor-widget-fr-about-hero > .elementor-widget-container {
+    width: 100%;
+}
+
+
+/* =========================================================
+   MAIN HERO LAYOUT
+   ========================================================= */
+
+.fr-about-hero {
+    display: grid;
+    grid-template-columns: 46% 54%;
+
+    width: 100%;
+    max-width: 1268px;
+    min-height: 620px;
+
+    margin: 0 auto;
+    padding: 0;
+
+    background: #fff;
+    font-family: 'Oxanium', sans-serif;
+
+    /* Important:
+       the image needs to be allowed to escape the normal
+       Elementor content width on desktop. */
+    overflow: visible;
+}
+
+
+/* =========================================================
+   LEFT SIDE CONTENT
+   ========================================================= */
+
+.fr-about-hero__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: #fff;
+}
+
+
+/* Main WHY US? heading */
+.fr-about-hero__content h1 {
+    margin: 0;
+    font-size: clamp(5rem, 8vw, 7.5rem);
+    font-weight: 900;
+    line-height: 0.82;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    color: #000;
+}
+
+
+/* Red accent line */
+.fr-about-hero__rule {
+    display: block;
+
+    width: 42px;
+    height: 4px;
+
+    margin: 2.25rem 0 2rem;
+
+    background: #ed1c24;
+}
+
+
+/* Body copy */
+.fr-about-hero__text {
+    max-width: 430px;
+
+    font-size: 1rem;
+    line-height: 1.65;
+
+    color: #222;
+}
+
+.fr-about-hero__text p {
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+}
+
+.fr-about-hero__text p:last-child {
+    margin-bottom: 0;
+}
+
+
+/* =========================================================
+   RIGHT SIDE IMAGE
+   ========================================================= */
+
+.fr-about-hero__image {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+    min-height: 620px;
+
+    overflow: hidden;
+}
+
+
+/* Image fills the entire right side */
+.fr-about-hero__image img {
+    position: absolute;
+    inset: 0;
+
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+
+    max-width: none;
+}
+
+
+/* =========================================================
+   DESKTOP IMAGE BREAKOUT
+   ========================================================= */
+
+/*
+ * Let the image extend beyond the normal Elementor container
+ * toward the right side of the viewport.
+ */
+@media (min-width: 1025px) {
+
+    .fr-about-section.elementor-section.elementor-section-boxed
+    > .elementor-container {
+        width: 100%;
+        max-width: 1268px;
+    }
+
+    .fr-about-section .elementor-column-gap-default
+    > .elementor-column
+    > .elementor-element-populated {
+        padding: 0;
+    }
+
+    .fr-about-hero__image {
+        width: calc(
+            100% + ((100vw - 100%) / 2)
+        );
+
+        max-width: none;
+    }
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1024px) {
+
+    .fr-about-hero {
+        grid-template-columns: 48% 52%;
+        min-height: 560px;
+    }
+
+    .fr-about-hero__content {
+        padding: 4rem 3rem;
+    }
+
+    .fr-about-hero__content h1 {
+        font-size: clamp(4.5rem, 8vw, 6rem);
+        line-height: 0.84;
+    }
+
+    .fr-about-hero__rule {
+        margin: 2rem 0;
+    }
+
+    .fr-about-hero__image {
+        width: 100%;
+        min-height: 560px;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+    .fr-about-hero {
+        display: flex;
+        flex-direction: column;
+
+        width: 100%;
+        min-height: auto;
+
+        overflow: hidden;
+    }
+
+
+    /* -------------------------
+       Content
+       ------------------------- */
+
+    .fr-about-hero__content {
+        width: 100%;
+
+        padding: 4rem 1.5rem;
+
+        background: #fff;
+    }
+
+    .fr-about-hero__content h1 {
+        font-size: clamp(4rem, 20vw, 6rem);
+        line-height: 0.84;
+    }
+
+    .fr-about-hero__rule {
+        width: 42px;
+        height: 4px;
+
+        margin: 1.75rem 0;
+    }
+
+    .fr-about-hero__text {
+        width: 100%;
+        max-width: 100%;
+
+        font-size: 1rem;
+        line-height: 1.65;
+    }
+
+
+    /* -------------------------
+       Image
+       ------------------------- */
+
+    .fr-about-hero__image {
+        width: 100%;
+        height: 500px;
+        min-height: 500px;
+    }
+
+    .fr-about-hero__image img {
+        object-position: center;
+    }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+    .fr-about-hero__content h1 {
+        font-size: clamp(3.75rem, 21vw, 5rem);
+    }
+
+    .fr-about-hero__text {
+        font-size: 0.95rem;
+    }
+
+    .fr-about-hero__image {
+        height: 420px;
+        min-height: 420px;
+    }
+}
