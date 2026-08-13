@@ -22,7 +22,20 @@ class FR_About_Hero_Widget extends \Elementor\Widget_Base {
         return array( 'general' );
     }
 
+    public function get_style_depends() {
+        return array(
+            'fr-about-style',
+            'fr-about-oxanium',
+        );
+    }
+
     protected function register_controls() {
+
+        /*
+         * =========================================
+         * Content
+         * =========================================
+         */
 
         $this->start_controls_section(
             'content_section',
@@ -31,6 +44,9 @@ class FR_About_Hero_Widget extends \Elementor\Widget_Base {
             )
         );
 
+        /*
+         * Heading
+         */
         $this->add_control(
             'heading',
             array(
@@ -41,6 +57,9 @@ class FR_About_Hero_Widget extends \Elementor\Widget_Base {
             )
         );
 
+        /*
+         * Description
+         */
         $this->add_control(
             'description',
             array(
@@ -53,6 +72,9 @@ class FR_About_Hero_Widget extends \Elementor\Widget_Base {
             )
         );
 
+        /*
+         * Image
+         */
         $this->add_control(
             'image',
             array(
@@ -61,30 +83,83 @@ class FR_About_Hero_Widget extends \Elementor\Widget_Base {
             )
         );
 
+        /*
+         * Image Position
+         */
+        $this->add_control(
+            'image_position',
+            array(
+                'label'   => esc_html__( 'Image Position', 'fr-astra-child' ),
+                'type'    => \Elementor\Controls_Manager::SELECT,
+                'default' => 'right',
+                'options' => array(
+                    'right' => esc_html__( 'Right', 'fr-astra-child' ),
+                    'left'  => esc_html__( 'Left', 'fr-astra-child' ),
+                ),
+            )
+        );
+
+        /*
+         * End Content Section
+         */
         $this->end_controls_section();
     }
 
     protected function render() {
 
         $settings = $this->get_settings_for_display();
+
+        /*
+         * Sanitize image position so only our two
+         * expected modifier classes can be output.
+         */
+        $image_position =
+            isset( $settings['image_position'] )
+            && in_array(
+                $settings['image_position'],
+                array( 'left', 'right' ),
+                true
+            )
+                ? $settings['image_position']
+                : 'right';
+
+        $section_classes = array(
+            'fr-about-hero',
+            'fr-about-hero--image-' . $image_position,
+        );
         ?>
 
-        <section class="fr-about-hero">
+        <section
+            class="<?php echo esc_attr( implode( ' ', $section_classes ) ); ?>"
+        >
 
             <div class="fr-about-hero__content">
 
                 <?php if ( ! empty( $settings['heading'] ) ) : ?>
+
                     <h1>
                         <?php echo esc_html( $settings['heading'] ); ?>
                     </h1>
+
                 <?php endif; ?>
 
-                <span class="fr-about-hero__rule"></span>
+                <span
+                    class="fr-about-hero__rule"
+                    aria-hidden="true"
+                ></span>
 
                 <?php if ( ! empty( $settings['description'] ) ) : ?>
+
                     <div class="fr-about-hero__text">
-                        <?php echo wp_kses_post( $settings['description'] ); ?>
+
+                        <?php
+                        echo wp_kses_post(
+                            $settings['description']
+                        );
+                        ?>
+
                     </div>
+
                 <?php endif; ?>
 
             </div>
@@ -94,10 +169,13 @@ class FR_About_Hero_Widget extends \Elementor\Widget_Base {
                 <div class="fr-about-hero__image">
 
                     <?php
-                    echo \Elementor\Group_Control_Image_Size::get_attachment_image_html(
-                        $settings,
-                        'image',
-                        'image'
+                    echo wp_get_attachment_image(
+                        absint( $settings['image']['id'] ),
+                        'full',
+                        false,
+                        array(
+                            'class' => 'fr-about-hero__img',
+                        )
                     );
                     ?>
 
