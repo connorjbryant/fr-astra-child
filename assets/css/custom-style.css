@@ -2367,3 +2367,9 @@ div.ywgc_have_code {
 .ht-products .ht-product .ht-product-inner .ht-product-action ul li a {
   padding: 0 !important;
 }
+
+/* AJAX view cart */
+.woocommerce-js.single-product a.added_to_cart {
+  color: black !important;
+  text-decoration: underline;
+}
