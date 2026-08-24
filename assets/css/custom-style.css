@@ -29,6 +29,10 @@
   display: none;
 }
 
+a.button.wc-forward, a.button.wc-forward:hover, a.button.wc-forward:focus, a.button.wc-forward:focus-visible {
+  color: white !important;
+}
+
 /* Move sale chip to the right */
 .ast-onsale-card {
   left: auto !important;
