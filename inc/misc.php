@@ -623,3 +623,31 @@ add_filter('woocommerce_cart_item_remove_link', function($link) {
         $link
     );
 }, 10, 1);
+
+/**
+ * Exclude Accessories products from the main PARTS category archive.
+ */
+function fr_exclude_accessories_from_parts_archive( $query ) {
+
+    if (
+        is_admin()
+        || ! $query->is_main_query()
+        || ! is_product_category( 'parts' )
+    ) {
+        return;
+    }
+
+    $tax_query = (array) $query->get( 'tax_query' );
+
+    $tax_query[] = array(
+        'taxonomy'         => 'product_cat',
+        'field'            => 'slug',
+        'terms'            => array( 'accessories' ),
+        'operator'         => 'NOT IN',
+        'include_children' => true,
+    );
+
+    $query->set( 'tax_query', $tax_query );
+}
+
+add_action( 'pre_get_posts', 'fr_exclude_accessories_from_parts_archive', 20 );
