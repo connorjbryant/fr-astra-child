@@ -847,4 +847,14 @@
         initAboutReviewsSlider();
     
     });
+
+    $(document).ready(function(){
+        var notice = $(".fr-product-image-notice");
+        var gallery = $(".woocommerce-product-gallery");
+
+        if (notice.length && gallery.length){
+            notice.appendTo(gallery);
+        }
+    });
+
 })(jQuery);

@@ -91,7 +91,7 @@ a.button.wc-forward, a.button.wc-forward:hover, a.button.wc-forward:focus, a.but
 
 /* Hide Your Garage on parts search */
 .ymm-garage {
-    display: none !important;
+  display: none !important;
 }
 
 /* Gift card page */
@@ -225,6 +225,34 @@ a.button.wc-forward, a.button.wc-forward:hover, a.button.wc-forward:focus, a.but
   margin-top: 10px;
   border-top: 2px solid #eee;
   padding-top: 10px;
+}
+
+/* Bushing notice message */
+.single-product .woocommerce-product-gallery {
+  position: relative;
+}
+
+.single-product .fr-product-image-notice {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  z-index: 10;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.78);
+  color: white;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-left: 3px solid yellow;
+}
+
+.single-product .fr-product-image-notice p {
+  margin: 0;
+}
+
+.single-product .fr-product-image-notice a {
+  color: white;
+  text-decoration: underline;
 }
 
 /* Rear bumper question */

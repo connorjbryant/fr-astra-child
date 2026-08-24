@@ -651,3 +651,22 @@ function fr_exclude_accessories_from_parts_archive( $query ) {
 }
 
 add_action( 'pre_get_posts', 'fr_exclude_accessories_from_parts_archive', 20 );
+
+/* Custom WYSIWYG Area on Product Images */
+add_action( 'woocommerce_before_single_product_summary', 'fr_product_image_notice', 15 );
+
+function fr_product_image_notice(){
+    if ( ! function_exists( 'get_field' ) ){
+        return;
+    }
+
+    $content = get_field('product_image_notice');
+
+    if ( empty($content) ){
+        return;
+    }
+
+    echo '<div class="fr-product-image-notice">';
+    echo wp_kses_post( $content );
+    echo '</div>';
+}
