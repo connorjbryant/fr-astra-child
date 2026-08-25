@@ -57,6 +57,10 @@ $search_query = isset($_GET['search_guide']) ? sanitize_text_field($_GET['search
         flex-direction: column;
     }
     
+    .install-btn {
+        border: 1px solid black;
+    }
+    
     .is-row {
         display: flex !important;
         flex-direction: row !important;
@@ -99,6 +103,9 @@ $search_query = isset($_GET['search_guide']) ? sanitize_text_field($_GET['search
     }
     
     @media (max-width: 1024px) {
+        .install-btn {
+            margin: 0;
+        }
         /* Main layout */
         .product-install {
             grid-template-columns: 1fr;
@@ -256,9 +263,37 @@ $search_query = isset($_GET['search_guide']) ? sanitize_text_field($_GET['search
             }
         }
         
-        asort($products_list);
+        // Sort product dropdown naturally by title.
+        natcasesort($products_list);
+        
+        // Sort categories alphabetically.
         asort($categories_list);
-    
+        
+        // Build product IDs sorted naturally by SKU.
+        $sorted_product_ids = array();
+        
+        $loop->rewind_posts();
+        
+        while ($loop->have_posts()) {
+            $loop->the_post();
+        
+            $product_id = get_the_ID();
+            $product    = wc_get_product($product_id);
+        
+            if (!$product) {
+                continue;
+            }
+        
+            $sku = $product->get_sku();
+        
+            $sorted_product_ids[$product_id] = $sku ?: get_the_title();
+        }
+        
+        // Natural sorting handles 10002, 10003, 10010 correctly.
+        uasort($sorted_product_ids, function ($a, $b) {
+            return strnatcasecmp($a, $b);
+        });
+        
         $loop->rewind_posts();
     
         ?>
@@ -296,7 +331,7 @@ $search_query = isset($_GET['search_guide']) ? sanitize_text_field($_GET['search
                 <label for="guide">Search:</label>
                 <div class="is-row">
                     <input type="text" name="search_guide" id="search_guide" value="<?php echo esc_attr($search_query); ?>" placeholder="Type to search" />
-                    <button type="submit">Submit</button>
+                    <button class="install-btn" type="submit">Submit</button>
                     <?php if (!empty($search_query)) : ?>
                         <a href="#" id="clear-search-btn">Clear Search</a>
                     <?php endif; ?>
@@ -310,12 +345,14 @@ $search_query = isset($_GET['search_guide']) ? sanitize_text_field($_GET['search
     
             echo '<ul class="products">';
 
-            while ($loop->have_posts()) :
-                $loop->the_post();
+            foreach ($sorted_product_ids as $product_id => $sku) :
+
+                $product = wc_get_product($product_id);
+                $file    = get_field('guide', $product_id);
             
-                $product_id = get_the_ID();
-                $product    = wc_get_product($product_id);
-                $file       = get_field('guide', $product_id);
+                if (!$product || empty($file)) {
+                    continue;
+                }
             
                 if (!$product || empty($file)) {
                     continue;
@@ -355,8 +392,8 @@ $search_query = isset($_GET['search_guide']) ? sanitize_text_field($_GET['search
                         id="<?php echo esc_attr($guide_anchor); ?>"
                         class="product-item prod-<?php echo esc_attr($product_id); ?> <?php echo esc_attr($category_class_string); ?>"
                     >
-                    <a href="<?php the_permalink(); ?>">
-                        <?php the_title(); ?>
+                    <a href="<?php echo esc_url(get_permalink($product_id)); ?>">
+                        <?php echo esc_html(get_the_title($product_id)); ?>
                     </a>
             
                     <div class="install-guide-preview">
@@ -365,7 +402,7 @@ $search_query = isset($_GET['search_guide']) ? sanitize_text_field($_GET['search
                             width="100%"
                             height="500"
                             style="border:0;"
-                            title="<?php echo esc_attr(get_the_title() . ' Install Guide'); ?>"
+                            title="<?php echo esc_attr(get_the_title($product_id) . ' Install Guide'); ?>"
                         ></iframe>
             
                         <a href="<?php echo esc_url($file_url); ?>" download>
@@ -375,7 +412,7 @@ $search_query = isset($_GET['search_guide']) ? sanitize_text_field($_GET['search
                 </li>
             
             <?php
-            endwhile;
+            endforeach;
             
             echo '</ul>';
             
