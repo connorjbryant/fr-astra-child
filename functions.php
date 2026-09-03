@@ -50,6 +50,7 @@ require_once FR_CHILD_DIR . 'inc/coupons.php';
 require_once FR_CHILD_DIR . 'inc/inventory-tools.php';
 require_once FR_CHILD_DIR . 'inc/seo.php';
 require_once FR_CHILD_DIR . 'inc/misc.php';
+require_once FR_CHILD_DIR . 'inc/holidays.php';
 
 /*
  * =========================================
