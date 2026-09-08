@@ -670,3 +670,36 @@ function fr_product_image_notice(){
     echo wp_kses_post( $content );
     echo '</div>';
 }
+
+// Display name of coupon in email orders
+add_filter(
+    'woocommerce_get_order_item_totals',
+    function ( $total_rows, $order, $tax_display ) {
+
+        // Only change the label when WooCommerce is generating an email.
+        if ( ! did_action( 'woocommerce_email_header' ) ) {
+            return $total_rows;
+        }
+
+        if ( empty( $total_rows['discount'] ) ) {
+            return $total_rows;
+        }
+
+        $coupons = $order->get_coupon_codes();
+
+        if ( empty( $coupons ) ) {
+            return $total_rows;
+        }
+
+        $coupon_names = implode( ', ', $coupons );
+
+        $total_rows['discount']['label'] = sprintf(
+            'Discount (%s):',
+            esc_html( $coupon_names )
+        );
+
+        return $total_rows;
+    },
+    10,
+    3
+);
