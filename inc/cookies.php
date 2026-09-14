@@ -141,3 +141,42 @@ function fr_save_ymm_to_order_item($item, $cart_item_key, $values, $order) {
         true
     );
 }
+
+/**
+ * Clear remembered YMM cookies after a successful WooCommerce order.
+ */
+add_action('woocommerce_thankyou', 'fr_clear_ymm_cookies_after_order', 20);
+
+function fr_clear_ymm_cookies_after_order($order_id) {
+
+    if (!$order_id) {
+        return;
+    }
+
+    $cookies = array(
+        'fr_ymm_year',
+        'fr_ymm_make',
+        'fr_ymm_model',
+    );
+
+    foreach ($cookies as $cookie_name) {
+
+        if (isset($_COOKIE[$cookie_name])) {
+
+            setcookie(
+                $cookie_name,
+                '',
+                array(
+                    'expires'  => time() - HOUR_IN_SECONDS,
+                    'path'     => COOKIEPATH ? COOKIEPATH : '/',
+                    'domain'   => COOKIE_DOMAIN,
+                    'secure'   => is_ssl(),
+                    'httponly' => true,
+                    'samesite' => 'Lax',
+                )
+            );
+
+            unset($_COOKIE[$cookie_name]);
+        }
+    }
+}
