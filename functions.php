@@ -51,6 +51,7 @@ require_once FR_CHILD_DIR . 'inc/inventory-tools.php';
 require_once FR_CHILD_DIR . 'inc/seo.php';
 require_once FR_CHILD_DIR . 'inc/misc.php';
 require_once FR_CHILD_DIR . 'inc/cookies.php';
+require_once FR_CHILD_DIR . 'inc/disclaimers.php';
 require_once FR_CHILD_DIR . 'inc/holidays.php';
 
 /*
