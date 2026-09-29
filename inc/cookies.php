@@ -65,6 +65,15 @@ function fr_capture_ymm_parameters() {
 add_filter('woocommerce_add_cart_item_data', 'fr_add_ymm_to_cart_item', 10, 3);
 
 function fr_add_ymm_to_cart_item($cart_item_data, $product_id, $variation_id) {
+    /*
+     * Accessories do not use Year / Make / Model fitment.
+     *
+     * If this is a variation, product_id is still the parent product ID,
+     * which is what WooCommerce product categories are normally assigned to.
+     */
+    if (has_term('accessories', 'product_cat', $product_id)) {
+        return $cart_item_data;
+    }
 
     if (isset($_COOKIE['fr_ymm_year'])) {
         $cart_item_data['fr_ymm_year'] =
@@ -96,6 +105,13 @@ add_action(
 );
 
 function fr_save_ymm_to_order_item($item, $cart_item_key, $values, $order) {
+
+    $product_id = $item->get_product_id();
+
+    // Accessories should never have YMM information.
+    if ($product_id && has_term('accessories', 'product_cat', $product_id)) {
+        return;
+    }
 
     $year  = isset($values['fr_ymm_year']) ? $values['fr_ymm_year'] : '';
     $make  = isset($values['fr_ymm_make']) ? $values['fr_ymm_make'] : '';
