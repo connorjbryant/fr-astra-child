@@ -463,8 +463,9 @@ function fr_block_flat_rate_when_shippo_rates_available($data, $errors) {
 
             $is_ground = strpos($label, 'ups ground') !== false && strpos($label, 'saver') === false;
             $is_saver  = strpos($label, 'ground saver') !== false;
+            $is_standard = strpos($label, 'ups standard') !== false;
 
-            if ($is_ground || $is_saver) {
+            if ($is_ground || $is_saver || $is_standard) {
                 $preferred_available = true;
                 break;
             }
@@ -479,7 +480,7 @@ function fr_block_flat_rate_when_shippo_rates_available($data, $errors) {
         if (strpos($selected_method, 'flat_rate') === 0) {
             $errors->add(
                 'fr_flat_rate_blocked',
-                'Please select UPS Ground or Ground Saver before placing your order.'
+                'Please select an available UPS shipping service before placing your order.'
             );
             return;
         }
@@ -823,8 +824,9 @@ function fr_checkout_hide_unwanted_shipping_options() {
                 var text = $(this).text().toLowerCase().replace(/\s+/g, ' ').trim();
                 var isGround = text.indexOf('ups ground') !== -1 && text.indexOf('saver') === -1;
                 var isSaver  = text.indexOf('ground saver') !== -1;
+                var isStandard = text.indexOf('ups standard') !== -1;
 
-                if (isGround || isSaver) {
+                if (isGround || isSaver || isStandard) {
                     foundPreferred = true;
                 }
             });
@@ -840,8 +842,9 @@ function fr_checkout_hide_unwanted_shipping_options() {
                 var text = $li.text().toLowerCase().replace(/\s+/g, ' ').trim();
                 var isGround = text.indexOf('ups ground') !== -1 && text.indexOf('saver') === -1;
                 var isSaver  = text.indexOf('ground saver') !== -1;
+                var isStandard = text.indexOf('ups standard') !== -1;
 
-                if (isGround || isSaver) {
+                if (isGround || isSaver || isStandard) {
                     $li.show();
                 } else {
                     $li.hide();
@@ -1023,16 +1026,13 @@ function fr_preserve_posted_shipping_method($posted_data) {
     }
 }
 
+
 /**
  * Shipping priority:
- *
- * 1. If an applied coupon has "Allow free shipping" enabled,
- *    return a custom $0 Free Shipping rate.
- *
- * 2. Otherwise, if preferred Shippo rates are available,
- *    only show UPS Ground / Ground Saver.
- *
- * 3. Otherwise, allow fallback methods such as Flat Rate.
+ * 1. Free-shipping coupon takes precedence.
+ * 2. Canada: UPS Ground, Ground Saver, or Standard only.
+ * 3. Canada: $30 Flat Rate if no eligible UPS service exists.
+ * 4. Other countries: preserve existing Ground / Ground Saver logic.
  */
 add_filter('woocommerce_package_rates', function ($rates, $package) {
 
@@ -1040,17 +1040,11 @@ add_filter('woocommerce_package_rates', function ($rates, $package) {
         return $rates;
     }
 
-    /*
-     * Check applied coupons directly.
-     */
+    // Preserve existing free-shipping coupon behavior.
     $has_free_shipping_coupon = false;
 
     if (function_exists('WC') && WC()->cart) {
-
-        $applied_coupons = WC()->cart->get_applied_coupons();
-
-        foreach ($applied_coupons as $coupon_code) {
-
+        foreach (WC()->cart->get_applied_coupons() as $coupon_code) {
             $coupon = new WC_Coupon($coupon_code);
 
             if ($coupon->get_free_shipping()) {
@@ -1060,12 +1054,7 @@ add_filter('woocommerce_package_rates', function ($rates, $package) {
         }
     }
 
-    /*
-     * If a valid applied coupon grants free shipping,
-     * bypass Shippo / Flat Rate and provide a $0 rate.
-     */
     if ($has_free_shipping_coupon) {
-
         $free_rate = new WC_Shipping_Rate(
             'fr_coupon_free_shipping',
             'Free Shipping',
@@ -1074,45 +1063,98 @@ add_filter('woocommerce_package_rates', function ($rates, $package) {
             'fr_coupon_free_shipping'
         );
 
-        return [
-            'fr_coupon_free_shipping' => $free_rate,
-        ];
+        return ['fr_coupon_free_shipping' => $free_rate];
     }
 
-    /*
-     * No free-shipping coupon:
-     * continue with normal Shippo preference logic.
-     */
+    $country = strtoupper($package['destination']['country'] ?? '');
     $preferred_rates = [];
+    $flat_rates = [];
 
     foreach ($rates as $rate_id => $rate) {
+        $label = strtolower(trim(preg_replace(
+            '/\s+/',
+            ' ',
+            $rate->get_label()
+        )));
 
-        $label = strtolower($rate->get_label());
+        $method_id = $rate->get_method_id();
 
-        $is_ground =
-            strpos($label, 'ups ground') !== false &&
-            strpos($label, 'saver') === false;
+        if ($method_id === 'flat_rate') {
+            $flat_rates[$rate_id] = $rate;
+            continue;
+        }
 
-        $is_saver =
-            strpos($label, 'ground saver') !== false;
+        $is_ground = strpos($label, 'ups ground') !== false
+            && strpos($label, 'saver') === false;
 
-        if ($is_ground || $is_saver) {
-            $preferred_rates[$rate_id] = $rate;
+        $is_saver = strpos($label, 'ground saver') !== false
+            && strpos($label, 'ups') !== false;
+
+        $is_standard = strpos($label, 'ups standard') !== false;
+
+        if ($country === 'CA') {
+            if ($is_ground || $is_saver || $is_standard) {
+                $preferred_rates[$rate_id] = $rate;
+            }
+        } else {
+            // Preserve existing US / other-country behavior.
+            if ($is_ground || $is_saver) {
+                $preferred_rates[$rate_id] = $rate;
+            }
         }
     }
 
-    /*
-     * Shippo is working:
-     * only expose Ground / Ground Saver.
-     */
+    if ($country === 'CA') {
+        if (!empty($preferred_rates)) {
+            $decision = 'preferred_ups_rates';
+            $result = $preferred_rates;
+        } else {
+            $decision = 'canada_flat_rate_fallback';
+            $result = $flat_rates;
+
+            // Preserve existing country-specific fallback price.
+            foreach ($result as $rate) {
+                $rate->set_cost(30);
+                $rate->set_taxes([]);
+            }
+        }
+
+        // Log only when WooCommerce shipping debugging is enabled.
+        if (
+            class_exists('WC_Logger') &&
+            get_option('woocommerce_shipping_debug_mode') === 'yes'
+        ) {
+            wc_get_logger()->debug(
+                wp_json_encode([
+                    'country' => $country,
+                    'postcode' => $package['destination']['postcode'] ?? '',
+                    'decision' => $decision,
+                    'incoming' => array_map(function ($rate) {
+                        return [
+                            'label' => $rate->get_label(),
+                            'method_id' => $rate->get_method_id(),
+                            'cost' => $rate->get_cost()
+                        ];
+                    }, array_values($rates)),
+                    'outgoing' => array_map(function ($rate) {
+                        return [
+                            'label' => $rate->get_label(),
+                            'cost' => $rate->get_cost()
+                        ];
+                    }, array_values($result))
+                ]),
+                ['source' => 'fr-canada-shipping']
+            );
+        }
+
+        return $result;
+    }
+
+    // Original behavior for US and other countries.
     if (!empty($preferred_rates)) {
         return $preferred_rates;
     }
 
-    /*
-     * Shippo unavailable:
-     * allow fallback Flat Rate.
-     */
     return $rates;
 
 }, 100, 2);
