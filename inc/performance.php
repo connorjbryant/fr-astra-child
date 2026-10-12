@@ -473,6 +473,7 @@ function fr_defer_noncritical_scripts(
         'wp-element',
         'wp-components',
         'wp-api-fetch',
+        'wp-private-apis',
         'wp-escape-html',
         'wp-primitives',
 
@@ -488,6 +489,8 @@ function fr_defer_noncritical_scripts(
         'mejs',
 
         // Elementor.
+        'elementor-webpack-runtime',
+        'elementor-frontend-modules',
         'elementor-frontend',
         'imagesloaded',
 
@@ -591,6 +594,8 @@ function fr_prepare_critical_scripts(
         'jquery',
 
         'wp-embed',
+        'wp-private-apis',
+        'wp-api-fetch',
 
         'mediaelement',
         'wp-mediaelement',
@@ -601,6 +606,8 @@ function fr_prepare_critical_scripts(
         'slick-carousel',
         'jquery-slick',
 
+        'elementor-webpack-runtime',
+        'elementor-frontend-modules',
         'elementor-frontend',
     );
 
@@ -620,6 +627,12 @@ function fr_prepare_critical_scripts(
             $wp_scripts
                 ->registered[ $handle ]
                 ->extra['group'] = 0;
+
+            unset(
+                $wp_scripts
+                    ->registered[ $handle ]
+                    ->extra['strategy']
+            );
         }
     }
 
