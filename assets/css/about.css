@@ -45,14 +45,25 @@
 
 /* =========================================================
    ELEMENTOR ABOUT SECTION
+   Keep the site's global 1268px content width. The hero
+   itself breaks out to the viewport on desktop only.
    ========================================================= */
 
 @media (min-width: 1025px) {
-
     .fr-about-section.elementor-section.elementor-section-boxed
     > .elementor-container {
         width: 100%;
         max-width: 1268px;
+    }
+
+    /* Prevent the boxed Elementor wrapper from clipping the breakout. */
+    .fr-about-section,
+    .fr-about-section > .elementor-container,
+    .fr-about-section .elementor-column,
+    .fr-about-section .elementor-widget-wrap,
+    .fr-about-section .elementor-widget-fr-about-hero,
+    .fr-about-section .elementor-widget-fr-about-hero > .elementor-widget-container {
+        overflow: visible;
     }
 }
 
@@ -63,11 +74,12 @@
 
 .fr-about-hero {
     display: grid;
-    grid-template-columns: 46% 54%;
+    grid-template-columns: minmax(0, 46%) minmax(0, 54%);
 
     width: 100%;
     max-width: 1268px;
     min-height: 620px;
+    min-width: 0;
 
     margin: 0 auto;
     padding: 0;
@@ -121,6 +133,7 @@
     justify-content: center;
 
     background: #fff;
+    min-width: 0;
 }
 
 
@@ -183,6 +196,8 @@
     width: 100%;
     height: 100%;
     min-height: 620px;
+    min-width: 0;
+    max-width: 100%;
 
     overflow: hidden;
 }
@@ -210,6 +225,24 @@
 
 @media (min-width: 1025px) {
 
+    /* Full-bleed hero, independent of the boxed 1268px site width. */
+    .fr-about-hero {
+        width: 100vw;
+        max-width: none;
+        margin-left: calc(50% - 50vw);
+        margin-right: 0;
+        grid-template-columns: minmax(0, 50%) minmax(0, 50%);
+    }
+
+    /* Align copy with the normal 1268px content area. */
+    .fr-about-hero--image-right .fr-about-hero__content {
+        padding-left: max(24px, calc((100vw - 1268px) / 2));
+    }
+
+    .fr-about-hero--image-left .fr-about-hero__content {
+        padding-right: max(24px, calc((100vw - 1268px) / 2));
+    }
+
     /* Text spacing */
 
     .fr-about-hero--image-right .fr-about-hero__content {
@@ -221,30 +254,15 @@
     }
 
 
-    /* Image right breakout */
-
-    .fr-about-hero--image-right .fr-about-hero__image {
-        width: calc(
-            100% + ((100vw - 100%) / 2)
-        );
-
-        max-width: none;
-    }
-
-
-    /* Image left breakout */
-
+    /* Keep both image variants within their assigned grid tracks. */
+    .fr-about-hero--image-right .fr-about-hero__image,
     .fr-about-hero--image-left .fr-about-hero__image {
-        width: calc(
-            100% + ((100vw - 100%) / 2)
-        );
-
-        max-width: none;
-
-        margin-left: calc(
-            ((100vw - 100%) / 2) * -1
-        );
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        margin-left: 0;
     }
+
 }
 
 
@@ -255,7 +273,7 @@
 @media (max-width: 1024px) {
 
     .fr-about-hero {
-        grid-template-columns: 48% 52%;
+        grid-template-columns: minmax(0, 48%) minmax(0, 52%);
 
         min-height: 560px;
 
