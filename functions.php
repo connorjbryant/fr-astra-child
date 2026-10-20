@@ -53,6 +53,7 @@ require_once FR_CHILD_DIR . 'inc/product-sorting.php';
 require_once FR_CHILD_DIR . 'inc/misc.php';
 require_once FR_CHILD_DIR . 'inc/cookies.php';
 require_once FR_CHILD_DIR . 'inc/disclaimers.php';
+require_once FR_CHILD_DIR . 'inc/sales.php';
 require_once FR_CHILD_DIR . 'inc/holidays.php';
 
 /*
