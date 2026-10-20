@@ -14,7 +14,7 @@ function fr_nov_dates_check(){
 /* Black Friday & Cyber Monday Sale */
 add_action('woocommerce_cart_calculate_fees', 'late_nov_sale');
 function late_nov_sale($cart){
-    // Don't do sale stuff if logged in or not the sale dates
+    // Don't do sale stuff if logged in the backend or doing an AJAX request
     if (is_admin() && !wp_doing_ajax() || !fr_nov_dates_check()){
         return;
     }
