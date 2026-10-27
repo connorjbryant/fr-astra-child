@@ -17,6 +17,7 @@
  * 10. Global / Header / Navigation
  * 11. Chat / Notices / Sticky Parts Button
  * 12. WooCommerce / WooLentor
+ * 13. Miscellaneous
  */
 
 
@@ -2404,4 +2405,11 @@ div.ywgc_have_code {
 .woocommerce-js.single-product a.added_to_cart {
   color: black !important;
   text-decoration: underline;
+}
+
+/* ==========================================================================
+   13. Miscellaneous
+   ========================================================================== */
+.ywgc-empty-table {
+  display: none !important;
 }

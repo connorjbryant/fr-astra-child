@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function fr_nov_dates_check(){
     $today = wp_date('Y-m-d');
 
-    return $today >= '2026-11-27' && $today <= '2026-11-30';
+    return $today >= '2026-10-27' && $today <= '2026-10-30';
 }
 
 /* Black Friday & Cyber Monday Sale */
@@ -41,4 +41,29 @@ function late_nov_sale($cart){
     if ($discount > 0){
         $cart->add_fee( __('Black Friday/Cyber Monday Sale', 'textdomain'), -$discount );
     }
+}
+
+/* Disable coupons only when cart qualifies for November discount */
+add_filter('woocommerce_coupon_is_valid', 'fr_disable_nov_coupons', 10, 3);
+function fr_disable_nov_coupons($valid, $coupon, $discounts){
+    // Only check during November sale
+    if (!fr_nov_dates_check()){
+        return $valid;
+    }
+
+    $cart = WC()->cart;
+
+    if (!$cart || $cart->is_empty()){
+        return $valid;
+    }
+
+    // Check subtotal before coupons
+    $total = $cart->get_subtotal();
+
+    // Block coupons if automatic discount applies
+    if ($total >= 200){
+        return false;
+    }
+
+    return $valid;
 }
