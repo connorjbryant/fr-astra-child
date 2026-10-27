@@ -1,14 +1,14 @@
 <?php
 /**
- * Flex Rock e-gift cards. Replace the OLD gift-card snippet entirely.
- * Requires WooCommerce and a simple, virtual gift-card product (ID 4803).
+ * Flex Rock e-gift cards.
+ * Requires WooCommerce and a simple, virtual gift-card product (ID #).
  */
 if ( ! defined( 'ABSPATH' ) ) exit;
 if ( ! defined( 'FR_GIFT_CARD_PRODUCT_ID' ) ) define( 'FR_GIFT_CARD_PRODUCT_ID', 4803 );
 
 function frgc_promo_active() {
     $today = wp_date( 'Y-m-d' );
-    return $today >= '2026-10-26' && $today <= '2026-10-30'; // EDIT dates before launch.
+    return $today >= '2026-12-15' && $today <= '2026-12-30'; // EDIT dates before launch.
 }
 function frgc_tiers() { return array( 100 => 110, 250 => 280, 500 => 550, 1000 => 1075 ); }
 function frgc_money( $value ) { return html_entity_decode( wp_strip_all_tags( wc_price( $value ) ), ENT_QUOTES, get_bloginfo( 'charset' ) ); }
@@ -25,7 +25,7 @@ function frgc_value( $paid, $promo ) {
     return $tier ? $tier[1] : $paid;
 }
 function frgc_valid_amount( $amount, $promo ) {
-    return is_finite( (float) $amount ) && $amount >= 10 && $amount <= 10000;
+    return is_finite( (float) $amount ) && $amount >= 100 && $amount <= 10000;
 }
 
 add_action( 'woocommerce_before_add_to_cart_button', function () {
@@ -412,13 +412,13 @@ function frgc_promo_product_image_switcher() {
       function update() {
         const raw = input.val();
         const paid = Number(raw);
-        const valid = raw !== '' && Number.isFinite(paid) && paid >= 10 && paid <= 10000;
+        const valid = raw !== '' && Number.isFinite(paid) && paid >= 100 && paid <= 10000;
         const tier = active && valid ? tiers.find(([minimum,value]) => paid >= minimum && paid < value) : null;
         const value = tier ? tier[1] : paid;
 
         if (price.length) price.text(valid ? format(paid) : '');
         if (info.length) {
-          info.text(valid ? ('You pay ' + format(paid) + ' and receive ' + format(value) + (tier ? ' (bonus ' + format(value-paid) + ')' : ' (no bonus)')) : 'Enter an amount from $10 to $10,000.');
+          info.text(valid ? ('You pay ' + format(paid) + ' and receive ' + format(value) + (tier ? ' (bonus ' + format(value-paid) + ')' : ' (no bonus)')) : 'Enter an amount from $100 to $10,000.');
         }
 
         if (!img.length || !initialImage) return;
