@@ -8,7 +8,7 @@ if ( ! defined( 'FR_GIFT_CARD_PRODUCT_ID' ) ) define( 'FR_GIFT_CARD_PRODUCT_ID',
 
 function frgc_promo_active() {
     $today = wp_date( 'Y-m-d' );
-    return $today >= '2026-12-15' && $today <= '2026-12-30'; // EDIT dates before launch.
+    return $today >= '2026-12-01' && $today <= '2026-12-31';
 }
 function frgc_tiers() { return array( 100 => 110, 250 => 280, 500 => 550, 1000 => 1075 ); }
 function frgc_money( $value ) { return html_entity_decode( wp_strip_all_tags( wc_price( $value ) ), ENT_QUOTES, get_bloginfo( 'charset' ) ); }
