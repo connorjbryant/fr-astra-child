@@ -1576,3 +1576,34 @@ add_action(
     'elementor/widgets/register',
     'fr_register_elementor_widgets'
 );
+
+/*
+ * =========================================
+ * Page 11 Scroll Reveal (Home)
+ * =========================================
+ */
+
+function fr_enqueue_scroll_reveal_assets() {
+    if ( ! is_page( 11 ) ) {
+        return;
+    }
+
+    $css_file = FR_CHILD_DIR . 'assets/css/scroll-reveal.css';
+    $js_file  = FR_CHILD_DIR . 'assets/js/scroll-reveal.js';
+
+    wp_enqueue_style(
+        'fr-scroll-reveal',
+        FR_CHILD_URI . 'assets/css/scroll-reveal.css',
+        array(),
+        file_exists( $css_file ) ? filemtime( $css_file ) : CHILD_THEME_FR_ASTRA_CHILD_VERSION
+    );
+
+    wp_enqueue_script(
+        'fr-scroll-reveal',
+        FR_CHILD_URI . 'assets/js/scroll-reveal.js',
+        array( 'jquery' ),
+        file_exists( $js_file ) ? filemtime( $js_file ) : CHILD_THEME_FR_ASTRA_CHILD_VERSION,
+        true
+    );
+}
+add_action( 'wp_enqueue_scripts', 'fr_enqueue_scroll_reveal_assets' );
