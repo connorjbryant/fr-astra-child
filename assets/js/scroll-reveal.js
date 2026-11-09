@@ -12,8 +12,7 @@
             return;
         }
 
-        var $items = $pageRoot.children('.elementor-section')
-            .not('.elementor-inner-section, .elementor-element-0c138d2');
+        var $items = $pageRoot.find('.elementor-widget');
 
         if (!$items.length) {
             return;
