@@ -1,3 +1,10 @@
+
+/*
+ * =========================================
+ * Page 11 - Home
+ * =========================================
+ */
+
 body.page-id-11.fr-scroll-reveal-ready .fr-scroll-reveal-item:not(.fr-scroll-reveal-visible) {
     opacity: 0.1;
     transform: translate3d(0, 18px, 0);
@@ -12,11 +19,101 @@ body.page-id-11 .fr-scroll-reveal-item.fr-scroll-reveal-visible {
     transform: none;
 }
 
+/*
+ * =========================================
+ * Page 384 - About
+ * =========================================
+ */
+
+body.page-id-384.fr-scroll-reveal-ready-384 [data-fr-scroll-reveal-item="true"]:not(.fr-scroll-reveal-visible) {
+    opacity: 0;
+}
+
+body.page-id-384 [data-fr-scroll-reveal-item="true"] {
+    animation-duration: 720ms;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    animation-fill-mode: both;
+}
+
+body.page-id-384 [data-fr-scroll-reveal-direction="left"].fr-scroll-reveal-visible {
+    animation-name: fr-scroll-reveal-left-384;
+}
+
+body.page-id-384 [data-fr-scroll-reveal-direction="right"].fr-scroll-reveal-visible {
+    animation-name: fr-scroll-reveal-right-384;
+}
+
+body.page-id-384 [data-fr-scroll-reveal-direction="up"].fr-scroll-reveal-visible {
+    animation-name: fr-scroll-reveal-up-384;
+}
+
+body.page-id-384 [data-fr-scroll-reveal-delay="1"] {
+    animation-delay: 100ms;
+}
+
+/*
+ * Directional Animations
+ */
+
+@keyframes fr-scroll-reveal-left-384 {
+    from {
+        opacity: 0;
+        transform: translate3d(-30px, 0, 0);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes fr-scroll-reveal-right-384 {
+    from {
+        opacity: 0;
+        transform: translate3d(30px, 0, 0);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes fr-scroll-reveal-up-384 {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 20px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/*
+ * Mobile
+ */
+
+@media (max-width: 767px) {
+    body.page-id-384 [data-fr-scroll-reveal-direction="left"].fr-scroll-reveal-visible,
+    body.page-id-384 [data-fr-scroll-reveal-direction="right"].fr-scroll-reveal-visible {
+        animation-name: fr-scroll-reveal-up-384;
+    }
+}
+
+/*
+ * Reduced Motion
+ */
+
 @media (prefers-reduced-motion: reduce) {
     body.page-id-11 .fr-scroll-reveal-item,
     body.page-id-11 .fr-scroll-reveal-item:not(.fr-scroll-reveal-visible) {
         opacity: 1;
         transform: none;
         transition: none;
+    }
+
+    body.page-id-384 [data-fr-scroll-reveal-item="true"] {
+        opacity: 1;
+        transform: none;
+        animation: none;
     }
 }

@@ -1579,12 +1579,12 @@ add_action(
 
 /*
  * =========================================
- * Page 11 Scroll Reveal (Home)
+ * Scroll Reveal (Home & About)
  * =========================================
  */
 
 function fr_enqueue_scroll_reveal_assets() {
-    if ( ! is_page( 11 ) ) {
+    if ( ! is_page( array( 11, 384 ) ) ) {
         return;
     }
 
