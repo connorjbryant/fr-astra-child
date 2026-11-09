@@ -1,4 +1,3 @@
-
 /*
  * =========================================
  * Page 11 - Home
@@ -89,6 +88,75 @@ body.page-id-384 [data-fr-scroll-reveal-delay="1"] {
 }
 
 /*
+ * =========================================
+ * Blog - /blog/
+ * =========================================
+ */
+
+body.fr-blog-reveal-ready [data-fr-blog-reveal="true"]:not(.fr-blog-reveal-visible) {
+    opacity: 0;
+}
+
+body.fr-blog-reveal-ready [data-fr-blog-reveal="true"] {
+    animation-duration: 680ms;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    animation-fill-mode: both;
+}
+
+body.fr-blog-reveal-ready [data-fr-blog-direction="left"].fr-blog-reveal-visible {
+    animation-name: fr-blog-reveal-left;
+}
+
+body.fr-blog-reveal-ready [data-fr-blog-direction="right"].fr-blog-reveal-visible {
+    animation-name: fr-blog-reveal-right;
+}
+
+body.fr-blog-reveal-ready [data-fr-blog-direction="up"].fr-blog-reveal-visible {
+    animation-name: fr-blog-reveal-up;
+}
+
+body.fr-blog-reveal-ready [data-fr-blog-delay="1"] {
+    animation-delay: 90ms;
+}
+
+/*
+ * Directional Animations
+ */
+
+@keyframes fr-blog-reveal-left {
+    from {
+        opacity: 0;
+        transform: translate3d(-24px, 0, 0) scale(0.985);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes fr-blog-reveal-right {
+    from {
+        opacity: 0;
+        transform: translate3d(24px, 0, 0) scale(0.985);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes fr-blog-reveal-up {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 18px, 0) scale(0.99);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/*
  * Mobile
  */
 
@@ -96,6 +164,11 @@ body.page-id-384 [data-fr-scroll-reveal-delay="1"] {
     body.page-id-384 [data-fr-scroll-reveal-direction="left"].fr-scroll-reveal-visible,
     body.page-id-384 [data-fr-scroll-reveal-direction="right"].fr-scroll-reveal-visible {
         animation-name: fr-scroll-reveal-up-384;
+    }
+
+    body.fr-blog-reveal-ready [data-fr-blog-direction="left"].fr-blog-reveal-visible,
+    body.fr-blog-reveal-ready [data-fr-blog-direction="right"].fr-blog-reveal-visible {
+        animation-name: fr-blog-reveal-up;
     }
 }
 
@@ -112,6 +185,12 @@ body.page-id-384 [data-fr-scroll-reveal-delay="1"] {
     }
 
     body.page-id-384 [data-fr-scroll-reveal-item="true"] {
+        opacity: 1;
+        transform: none;
+        animation: none;
+    }
+
+    body [data-fr-blog-reveal="true"] {
         opacity: 1;
         transform: none;
         animation: none;

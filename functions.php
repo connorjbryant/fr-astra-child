@@ -1577,14 +1577,17 @@ add_action(
     'fr_register_elementor_widgets'
 );
 
+
 /*
  * =========================================
- * Scroll Reveal (Home & About)
+ * Scroll Reveal (Home, About & Blog)
  * =========================================
  */
 
 function fr_enqueue_scroll_reveal_assets() {
-    if ( ! is_page( array( 11, 384 ) ) ) {
+    $path = trim( parse_url( $_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH ) ?: '/', '/' );
+
+    if ( ! is_page( array( 11, 384 ) ) && $path !== 'blogs' ) {
         return;
     }
 

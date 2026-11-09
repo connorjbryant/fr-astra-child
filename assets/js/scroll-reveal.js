@@ -129,6 +129,107 @@
             }
         }
 
+        
+        /*
+        * =========================================
+        * Blog - /blog/
+        * =========================================
+        */
+
+        if ($('body').hasClass('page-id-3542')) {
+
+            var $blogRoot = $('.elementor[data-elementor-id="3542"]');
+
+            // Find the post grid dynamically.
+            var $blogCards = $blogRoot.find('.elementor-post, .e-loop-item');
+            var $blogGrids = $blogCards.parent();
+
+            // Find the heading before the first post grid.
+            var $blogHeading = $();
+
+            if ($blogGrids.length) {
+                $blogHeading = $blogRoot
+                    .find('.elementor-heading-title')
+                    .filter(function () {
+                        return $(this).offset().top <
+                            $blogGrids.first().offset().top;
+                    })
+                    .last();
+            }
+
+            var $blogItems = $blogHeading.add($blogCards);
+            var blogObserver;
+
+            if ($blogItems.length) {
+                try {
+                    blogObserver = new IntersectionObserver(function (entries, observer) {
+                        $.each(entries, function (_, entry) {
+                            if (entry.isIntersecting) {
+                                $(entry.target).addClass('fr-blog-reveal-visible');
+                                observer.unobserve(entry.target);
+                            }
+                        });
+                    }, {
+                        threshold: 0.12,
+                        rootMargin: '0px 0px -4% 0px'
+                    });
+
+                    // Heading animation.
+                    $blogHeading.attr({
+                        'data-fr-blog-reveal': 'true',
+                        'data-fr-blog-direction': 'up',
+                        'data-fr-blog-delay': '0'
+                    });
+
+                    // Blog card animations.
+                    $blogGrids.each(function () {
+                        var $grid = $(this);
+                        var gridRect = this.getBoundingClientRect();
+
+                        $grid.find('.elementor-post').each(function (index) {
+                            var rect = this.getBoundingClientRect();
+                            var direction = 'up';
+
+                            if (window.innerWidth > 767) {
+                                var cardCenter = rect.left + rect.width / 2;
+                                var gridCenter = gridRect.left + gridRect.width / 2;
+
+                                direction = cardCenter < gridCenter ? 'left' : 'right';
+                            }
+
+                            $(this).attr({
+                                'data-fr-blog-reveal': 'true',
+                                'data-fr-blog-direction': direction,
+                                'data-fr-blog-delay': index % 2 ? '1' : '0'
+                            });
+                        });
+                    });
+
+                    $blogItems.each(function () {
+                        var rect = this.getBoundingClientRect();
+
+                        if (rect.bottom > 0 && rect.top < window.innerHeight) {
+                            $(this).addClass('fr-blog-reveal-visible');
+                        } else {
+                            blogObserver.observe(this);
+                        }
+                    });
+
+                    $('body').addClass('fr-blog-reveal-ready');
+
+                } catch (error) {
+                    if (blogObserver) blogObserver.disconnect();
+
+                    $('body').removeClass('fr-blog-reveal-ready');
+
+                    $blogItems
+                        .removeAttr('data-fr-blog-reveal data-fr-blog-direction data-fr-blog-delay')
+                        .removeClass('fr-blog-reveal-visible');
+                }
+            }
+        }
+
+
     });
 
 })(jQuery);
