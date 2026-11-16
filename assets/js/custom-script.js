@@ -857,4 +857,13 @@
         }
     });
 
+    $(".js-btn").on("click", function(){
+        $.ajax({
+            url: "test.txt",
+            success: function(result){
+                $("#ajax").html(result);
+            }
+        })
+    });
+
 })(jQuery);

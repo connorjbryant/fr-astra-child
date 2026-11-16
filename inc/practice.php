@@ -4,46 +4,35 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// function check_time(){     
-//     $file_path = get_stylesheet_directory() . '/test.txt';
-//     $two_weeks_ago = strtotime('-14 days');
+function check_time(){     
+    $file_path = get_stylesheet_directory() . '/test.txt';
+    $two_weeks_ago = strtotime('-14 days');
 
-//     if (file_exists($file_path)){
-//         if(filemtime($file_path) < $two_weeks_ago){
-//             echo "Old file";
-//         } else {
-//             echo "New file";
-//         }
-//     } else {
-//         echo "File does not exist";
-//     }
-// }
+    if (file_exists($file_path)){
+        if(filemtime($file_path) < $two_weeks_ago){
+            echo "Old file";
+        } else {
+            echo "New file";
+        }
+    } else {
+        echo "File does not exist";
+    }
+}
 
-// add_action('wp', 'session_ex');
-// function session_ex(){
+add_action('wp', 'customCookie');
+function customCookie(){
+    WC()->session->set('customCookie', 'ConnorCookie');
 
-//     if(isset($_GET['secret'])){
-//         WC()->session->set('custom_val', 'Hello');
+    $cookie = WC()->session->get('customCookie');
 
-//         $value = WC()->session->get('custom_val');
-//         echo "<p style='position: fixed; bottom: 0; z-index: 1000;'>" . $value . "</p>";
+    echo $cookie;
+}
 
-//         if(WC()->session->get('custom_val')){
-//             echo "Ayo";
-//         }
-//         if(WC()->session->get('custom_val')){
-//             echo "ayo";
-//         }
-//     }
-//     check_time();
-// }
+add_action('the_content', 'customAddition');
+function customAddition($content){
+    if(is_singular()){
+        $custom_markup = '<button class="js-btn">Click me</button><p id="ajax">Test</p>';
+    }
 
-// add_filter('the_content', 'my_content');
-// function my_content($content){
-//     if (is_singular()){
-//         $new = '<form method="GET">
-//         <input type="text" name="secret">
-//         <button type="submit">Submit</button>';
-//         return $content . $new;
-//     }
-// }
+    return $content . $custom_markup;
+}
