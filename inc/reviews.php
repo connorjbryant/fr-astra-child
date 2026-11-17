@@ -57,6 +57,11 @@ function woocommerce_template_single_rating() {
 
     $count = count($reviews);
 
+    // Hide the entire review section if no reviews exist.
+    if ($count === 0) {
+        return;
+    }
+
     echo '<div class="fr-product-reviews">';
 
     if ($count === 1) {
