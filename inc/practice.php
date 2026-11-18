@@ -19,20 +19,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 //     }
 // }
 
-// add_action('wp', 'customCookie');
-// function customCookie(){
-//     WC()->session->set('customCookie', 'ConnorCookie');
+add_action('wp', 'wooConnor');
+function wooConnor(){
+    WC()->session->set('woo_message', 'Hello');
 
-//     $cookie = WC()->session->get('customCookie');
+    $val = WC()->session->get('woo_message');
 
-//     echo $cookie;
-// }
+    echo $val;
+}
 
-// add_action('the_content', 'customAddition');
-// function customAddition($content){
-//     if(is_singular()){
-//         $custom_markup = '<button class="js-btn">Click me</button><p id="ajax">Test</p>';
-//     }
+add_action('the_content', 'customContent');
+function customContent($content){
+    if(is_singular()){
+        $new = '<p id="ajax">New thing</p><button class="js-btn">Click</button>';
+    }
 
-//     return $content . $custom_markup;
-// }
+    return $content . $new;
+}

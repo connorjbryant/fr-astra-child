@@ -859,9 +859,9 @@
 
     $(".js-btn").on("click", function(){
         $.ajax({
-            url: "test.txt",
+            url: "flex-rock.txt",
             success: function(result){
-                $("#ajax").html(result);
+                $("#ajax").append(result);
             }
         })
     });

@@ -217,7 +217,7 @@ $search_query = isset($_GET['search_guide']) ? sanitize_text_field($_GET['search
     $args = array(
         'post_type'      => 'product',
         'posts_per_page' => -1,
-        'post_status'    => 'publish',
+        'post_status'    => array('publish', 'private'),
         's'              => $search_query,
         'meta_query'     => array(
             array(
@@ -246,7 +246,7 @@ $search_query = isset($_GET['search_guide']) ? sanitize_text_field($_GET['search
                 continue;
             }
     
-            $products_list[$product_id] = get_the_title();
+            $products_list[$product_id] = get_the_title($product_id);
             
             $product_categories = get_the_terms($product_id, 'product_cat');
 
@@ -392,9 +392,19 @@ $search_query = isset($_GET['search_guide']) ? sanitize_text_field($_GET['search
                         id="<?php echo esc_attr($guide_anchor); ?>"
                         class="product-item prod-<?php echo esc_attr($product_id); ?> <?php echo esc_attr($category_class_string); ?>"
                     >
-                    <a href="<?php echo esc_url(get_permalink($product_id)); ?>">
-                        <?php echo esc_html(get_the_title($product_id)); ?>
-                    </a>
+                    <?php if ($product->get_status() === 'private') : ?>
+
+                        <strong>
+                            <?php echo esc_html(get_the_title($product_id)); ?>
+                        </strong>
+                    
+                    <?php else : ?>
+                    
+                        <a href="<?php echo esc_url(get_permalink($product_id)); ?>">
+                            <?php echo esc_html(get_the_title($product_id)); ?>
+                        </a>
+                    
+                    <?php endif; ?>
             
                     <div class="install-guide-preview">
                         <iframe
