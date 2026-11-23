@@ -861,9 +861,9 @@
         $.ajax({
             url: "flex-rock.txt",
             success: function(result){
-                $("#ajax").append(result);
+                $("#ajax").html(result);
             }
-        })
+        });
     });
 
 })(jQuery);

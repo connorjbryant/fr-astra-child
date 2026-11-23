@@ -19,19 +19,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 //     }
 // }
 
-add_action('wp', 'wooConnor');
-function wooConnor(){
-    WC()->session->set('woo_message', 'Hello');
+add_action('wp', 'customCookie');
+function customCookie(){
+    WC()->session->set('customCookie1', 'message');
 
-    $val = WC()->session->get('woo_message');
+    $val = WC()->session->get('customCookie1');
 
     echo $val;
 }
 
-add_action('the_content', 'customContent');
-function customContent($content){
+add_action('the_content', 'newMarkup');
+function newMarkup($content){
     if(is_singular()){
-        $new = '<p id="ajax">New thing</p><button class="js-btn">Click</button>';
+        $new = '<p id="ajax">Hello</p><button class="js-btn">Click</button>';
     }
 
     return $content . $new;

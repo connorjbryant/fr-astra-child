@@ -2491,3 +2491,8 @@ div.ywgc_have_code {
 .fr-product-reviews__submit {
   white-space: nowrap;
 }
+
+/* Z-index fix */
+header {
+  z-index: 1000006 !important;
+}
