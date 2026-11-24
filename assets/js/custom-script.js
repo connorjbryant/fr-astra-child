@@ -857,13 +857,13 @@
         }
     });
 
-    $(".js-btn").on("click", function(){
-        $.ajax({
-            url: "flex-rock.txt",
-            success: function(result){
-                $("#ajax").html(result);
-            }
-        });
-    });
+    // $(".js-btn").on("click", function(){
+    //     $.ajax({
+    //         url: 'flex-rock.txt',
+    //         success: function(success){
+    //             $("#ajax").html(success);
+    //         }
+    //     })
+    // })
 
 })(jQuery);

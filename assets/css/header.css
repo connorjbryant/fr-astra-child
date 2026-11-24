@@ -1,0 +1,760 @@
+/* Flex Rock Performance — Header */
+
+:root {
+    --red: #e30b17;
+    --ink: #101317;
+    --muted: #6d7379;
+    --line: #dde1e4;
+    --soft: #f4f6f7;
+    --width: 1320px;
+    --gutter: 64px;
+}
+
+.page-width {
+    width: 1268px;
+    max-width: 100%;
+    margin-inline: auto;
+    box-sizing: border-box;
+}
+/* Fixed + full-width header so content stays centered */
+
+.masthead {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 9999;
+    background: white;
+}
+/* Push page content down so it isn't hidden under the fixed header.
+   Adjust this value to match your actual header height. */
+
+body {
+    padding-top: 180px;
+}
+
+.masthead *, .masthead *::before, .masthead *::after {
+    box-sizing: border-box;
+}
+
+.masthead-top {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    width: 1268px;
+    max-width: 100%;
+    margin-inline: auto;
+    min-height: 120px;
+    background: var(--ink);
+}
+
+.masthead-top::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    height: 3px;
+    background: linear-gradient(to right, transparent 0%, #D3D3D3 10%, #FFFFFF 100%);
+    z-index: 6;
+    pointer-events: none;
+}
+/* Logo and angled accent */
+
+.logo-panel {
+    position: relative;
+    z-index: 3;
+    flex: 0 0 340px;
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 12px 0 12px 40px;
+}
+
+.logo-panel::after, .logo-panel::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transform: skewX(-18deg);
+    pointer-events: none;
+}
+
+.logo-panel::after {
+    right: -48px;
+    width: 96px;
+    background: white;
+    z-index: 1;
+}
+
+.logo-panel::before {
+    right: -51px;
+    width: 34px;
+    background: var(--red);
+    z-index: 2;
+}
+
+.logo-panel a {
+    position: relative;
+    z-index: 4;
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 18px;
+}
+
+.logo-panel img {
+    display: block;
+    width: 260px;
+    max-width: 100%;
+    height: auto;
+}
+
+.masthead-right {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--ink);
+    padding-left: 56px;
+}
+/* Review ribbon */
+
+.promo-row {
+    position: relative;
+    min-height: 34px;
+    background: var(--red);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 24px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+}
+
+.promo-row::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -22px;
+    width: 22px;
+    height: 100%;
+    background: var(--red);
+    clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+.promo-row a { color: white; }
+.promo-row a:hover { opacity: .9; }
+/* FiboSearch */
+
+.search-row {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 0 16px 0 8px;
+    min-height: 86px;
+}
+
+.masthead .product-search {
+    display: block;
+    flex: 1 1 560px;
+    width: 100%;
+    max-width: 560px;
+    min-width: 0;
+    margin-inline: auto 24px;
+}
+.masthead .dgwt-wcas-search-wrapp,
+
+.masthead .dgwt-wcas-sf-wrapp {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    position: relative !important;
+    background: transparent;
+    padding: 0;
+}
+/* Force dark search input */
+
+.masthead input.dgwt-wcas-search-input {
+    height: 46px !important;
+    background: var(--ink) !important;
+    border: 1px solid #3a3f45 !important;
+    border-radius: 0 !important;
+    color: #ffffff !important;
+    font-size: 14px !important;
+    box-shadow: none !important;
+    padding-left: 16px !important;
+    padding-right: 56px !important;
+    width: 100% !important;
+}
+
+.masthead input.dgwt-wcas-search-input::placeholder {
+    color: #8a9096 !important;
+    opacity: 1 !important;
+}
+/* Force search submit button to the RIGHT + white icon */
+.masthead .dgwt-wcas-search-submit,
+
+.masthead .dgwt-wcas-sf-wrapp button[type="submit"] {
+    position: absolute !important;
+    right: 0 !important;
+    left: auto !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    height: 100% !important;
+    width: 48px !important;
+    min-width: 48px !important;
+    background: var(--red) !important;
+    border: none !important;
+    border-radius: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 5 !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.masthead .dgwt-wcas-search-submit:hover {
+    background: #c70a14 !important;
+}
+
+.masthead .dgwt-wcas-search-submit::before {
+    display: none !important;
+}
+
+.masthead .dgwt-wcas-search-submit svg {
+    width: 20px !important;
+    height: 20px !important;
+}
+.masthead .dgwt-wcas-search-submit svg,
+
+.masthead .dgwt-wcas-search-submit svg * {
+    fill: white !important;
+    stroke: white !important;
+    color: white !important;
+}
+.masthead .mobile-search-toggle { display: none; }
+.masthead .header-search-panel { width: 100%; }
+/* Results dropdown — constrained to header/search width */
+
+.dgwt-wcas-suggestions-wrapp {
+    z-index: 9999999 !important;
+    background: #ffffff !important;
+    color: #101317 !important;
+    border: 1px solid #dde1e4 !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,.15) !important;
+    max-width: 560px !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+}
+
+@media (max-width: 1200px) {
+    .dgwt-wcas-suggestions-wrapp {
+        max-width: calc(100vw - 40px) !important;
+    }
+}
+.dgwt-wcas-suggestions-wrapp a,
+
+.dgwt-wcas-suggestion {
+    color: #101317 !important;
+}
+/* Make sure nothing clips the dropdown */
+.masthead,
+.masthead-top,
+.search-row,
+
+.product-search {
+    overflow: visible;
+}
+/* Account and cart */
+
+.masthead .header-tool {
+    height: 64px;
+    width: 80px;
+    flex-shrink: 0;
+    border-left: 1px solid #2e3338;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    position: relative;
+    text-decoration: none;
+    transition: background .15s;
+}
+.masthead .header-tool:hover { background: rgba(255,255,255,.05); }
+
+.masthead .header-tool svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+}
+
+.header-tool span {
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.masthead .cart-tool i {
+    position: absolute;
+    right: 14px;
+    top: 8px;
+    min-width: 17px;
+    height: 17px;
+    padding-inline: 3px;
+    border-radius: 20px;
+    background: var(--red);
+    color: white;
+    font-size: 9px;
+    font-style: normal;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+    line-height: 1;
+}
+/* Hamburger */
+
+.masthead .menu-toggle {
+    display: none;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.menu-toggle span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: white;
+    transition: transform .25s, opacity .25s;
+}
+.menu-toggle.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.menu-toggle.is-open span:nth-child(2) { opacity: 0; }
+.menu-toggle.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+/* WordPress navigation */
+.masthead .main-nav { background: var(--ink); }
+
+.masthead .nav-inner {
+    width: min(1268px, calc(100% - 48px));
+    margin-inline: auto;
+    padding: 0;
+}
+
+.masthead .frp-nav-menu, .masthead .frp-nav-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.masthead .frp-nav-menu {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    min-height: 56px;
+    gap: 12px;
+}
+.masthead .frp-nav-menu li { position: relative; margin: 0; }
+.masthead .frp-nav-menu > li { display: flex; align-items: stretch; }
+
+.masthead .frp-nav-menu a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: white;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+    transition: background .2s, border-color .2s;
+}
+
+.masthead .frp-nav-menu > li > a {
+    padding: 0 12px;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+}
+.masthead .frp-nav-menu > li:hover > a,
+.masthead .frp-nav-menu > .current-menu-item > a,
+
+.masthead .frp-nav-menu > .current-menu-ancestor > a {
+    border-bottom-color: var(--red);
+    color: white;
+}
+/* Desktop dropdowns */
+
+.masthead .frp-nav-menu .sub-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 230px;
+    background: var(--ink);
+    border-top: 2px solid var(--red);
+    box-shadow: 0 12px 24px rgba(0,0,0,.25);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition: opacity .2s, visibility .2s, transform .2s;
+    z-index: 100;
+}
+
+.masthead .frp-nav-menu li.submenu-open > .sub-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.masthead .frp-nav-menu .sub-menu a {
+    padding: 14px 18px;
+    font-size: 12px;
+    border-bottom: 1px solid #292d32;
+}
+.masthead .frp-nav-menu .sub-menu a:hover { background: #24282d; }
+.masthead .frp-nav-menu .sub-menu .sub-menu { top: 0; left: 100%; }
+
+/* Dropdown controls */
+
+.masthead .submenu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 28px;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    color: white;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.masthead .submenu-toggle:is(:hover, :focus) {
+    background: transparent;
+    box-shadow: none;
+}
+
+.masthead .submenu-toggle::after {
+    content: "";
+    display: block;
+    width: 16px;
+    height: 16px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") center / contain no-repeat;
+    transform: rotate(0deg);
+    transition: transform .25s ease;
+}
+
+.masthead .submenu-toggle[aria-expanded="true"]::after {
+    transform: rotate(180deg);
+}
+/* Grid keeps the button centered even when a label wraps. */
+
+.masthead .frp-nav-menu .menu-item-has-children {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: stretch;
+}
+.masthead .frp-nav-menu .menu-item-has-children > a { padding-right: 4px; }
+.masthead .frp-nav-menu .menu-item-has-children > .sub-menu { grid-column: 1 / -1; }
+.masthead .frp-nav-menu > li > .submenu-toggle { padding-bottom: 3px; }
+.masthead .mobile-account-link, .masthead .nav-backdrop { display: none; }
+
+.masthead a:focus-visible, .masthead button:focus-visible {
+    outline: 2px solid #2390ff;
+    outline-offset: -2px;
+}
+
+@media (min-width: 981px) and (max-width: 1320px) {
+    .masthead .promo-row::after { display: none; }
+}
+
+@media (min-width: 981px) and (max-width: 1200px) {
+    .logo-panel { flex-basis: 280px; padding-left: 28px; }
+    .logo-panel img { width: 200px; }
+    .logo-panel a { padding: 8px 12px; }
+    .logo-panel::after { right: -40px; width: 80px; }
+    .logo-panel::before { right: -46px; }
+    .masthead-right { padding-left: 48px; }
+    .masthead .frp-nav-menu { gap: 4px; }
+    .masthead .frp-nav-menu > li > a { font-size: 11px; padding-inline: 8px; }
+}
+/* Tablet and mobile */
+
+@media (max-width: 980px) {
+    .masthead-top {
+        display: grid;
+        grid-template-columns: 48px 1fr auto auto;
+        grid-template-rows: auto 70px;
+        align-items: center;
+        width: 100%;
+        min-height: 0;
+        margin: 0;
+        background: white;
+        padding: 0 8px;
+    }
+    .masthead-top::after { display: none; }
+    .masthead-right,
+    .masthead .search-row {
+        display: contents;
+    }
+    .masthead .promo-row {
+        grid-column: 1 / -1;
+        grid-row: 1;
+        min-height: 28px;
+        padding: 4px 12px;
+        justify-content: center;
+        font-size: 9px;
+        letter-spacing: .5px;
+        text-align: center;
+    }
+    .masthead .promo-row::before,
+    .masthead .promo-row::after {
+        display: none;
+    }
+    .masthead .menu-toggle {
+        display: flex;
+        grid-column: 1;
+        grid-row: 2;
+        align-self: center;
+        justify-self: start;
+        width: 44px;
+        height: 44px;
+    }
+    .masthead .menu-toggle span {
+        background: var(--ink);
+    }
+    .masthead .logo-panel {
+        grid-column: 2;
+        grid-row: 2;
+        padding: 0;
+        justify-content: center;
+        background: transparent;
+    }
+    .masthead .logo-panel::before,
+    .masthead .logo-panel::after {
+        display: none;
+    }
+    .masthead .logo-panel a {
+        padding: 0;
+        justify-content: center;
+    }
+    .masthead .logo-panel img {
+        width: 160px;
+        max-width: 100%;
+        height: auto;
+    }
+    .masthead .account-tool {
+        display: none;
+    }
+    /* Mobile search: custom toggle + classic FiboSearch form */
+    .masthead .product-search {
+        grid-column: 3;
+        grid-row: 2;
+        width: 44px;
+        height: 44px;
+        margin: 0;
+        justify-self: end;
+    }
+    .masthead .mobile-search-toggle {
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        min-height: 0;
+        padding: 0;
+        margin: 0;
+        border: 0;
+        background: transparent;
+        color: var(--ink);
+        line-height: 1;
+        box-shadow: none;
+        cursor: pointer;
+    }
+
+    .masthead .mobile-search-toggle svg {
+        display: block;
+        width: 22px;
+        height: 22px;
+        margin: 0;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+    }
+    .masthead .header-search-panel {
+        display: none;
+        position: absolute;
+        top: 100%;
+        inset-inline: 0;
+        padding: 12px 16px;
+        background: var(--ink);
+        z-index: 110;
+        box-shadow: 0 8px 20px rgba(0,0,0,.15);
+    }
+    .masthead input.dgwt-wcas-search-input {
+        height: 44px !important;
+        font-size: 16px !important;
+    }
+    .dgwt-wcas-suggestions-wrapp {
+        max-width: calc(100vw - 32px) !important;
+        max-height: 55vh !important;
+        max-height: 55dvh !important;
+        overflow-y: auto !important;
+        overscroll-behavior: contain;
+        border-radius: 0 !important;
+    }
+    /* Cart */
+    .masthead .cart-tool {
+        grid-column: 4;
+        grid-row: 2;
+        width: 52px;
+        height: 52px;
+        border: 0;
+        color: var(--ink);
+        justify-self: end;
+    }
+    .masthead .cart-tool span {
+        display: none;
+    }
+    .masthead .cart-tool i {
+        top: 4px;
+        right: 4px;
+    }
+    /* Navigation */
+    .masthead .main-nav {
+        display: none;
+        position: relative;
+        width: 100%;
+        height: auto;
+        background: var(--ink);
+    }
+    .masthead .nav-inner {
+        width: 100%;
+        max-width: none;
+        padding: 16px;
+    }
+    .masthead .frp-nav-menu {
+        display: block;
+        min-height: 0;
+    }
+    .masthead .frp-nav-menu li {
+        display: block;
+        position: relative;
+    }
+    .masthead .frp-nav-menu > li {
+        margin-bottom: 4px;
+    }
+    .masthead .frp-nav-menu a,
+    .masthead .frp-nav-menu > li > a {
+        min-height: 52px;
+        padding: 12px 16px;
+        border: 0;
+        border-left: 3px solid transparent;
+        border-radius: 3px;
+        font-size: 15px;
+        font-weight: 500;
+        text-transform: none;
+        white-space: normal;
+    }
+    .masthead .frp-nav-menu > .current-menu-item > a,
+    .masthead .frp-nav-menu > .current-menu-ancestor > a {
+        background: #303236;
+        border-left-color: var(--red);
+    }
+    .masthead .frp-nav-menu .sub-menu,
+    .masthead .frp-nav-menu .sub-menu .sub-menu {
+        display: none;
+        position: static;
+        min-width: 0;
+        width: 100%;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        border: 0;
+        box-shadow: none;
+        background: #1b1e22;
+        transition: none;
+        padding-left: 12px;
+    }
+    .masthead .frp-nav-menu .sub-menu a {
+        font-size: 14px;
+        border-bottom: 0;
+    }
+    .masthead .frp-nav-menu .menu-item-has-children > a {
+        padding-right: 4px;
+    }
+    .masthead .frp-nav-menu .menu-item-has-children > .submenu-toggle {
+        width: 44px;
+        min-height: 52px;
+        padding: 0;
+    }
+    .masthead .mobile-account-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 50px;
+        margin-top: 20px;
+        padding: 12px 20px;
+        background: var(--red);
+        color: white;
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: .05em;
+        text-transform: uppercase;
+        text-decoration: none;
+        clip-path: polygon(0 20%, 7% 0, 100% 0, 100% 80%, 93% 100%, 0 100%);
+    }
+    /* Extra safety for product images / galleries that often overflow */
+    .single-product .woocommerce-product-gallery,
+    .single-product .woocommerce-product-gallery__wrapper,
+    .single-product .product img,
+    .woocommerce img,
+    .woocommerce-page img {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .masthead *, .masthead *::before, .masthead *::after { transition: none; }
+}
+/* WooCommerce page layout */
+:is(.woocommerce-page, .woocommerce, .single-product, .tax-product_cat, .tax-product_tag, .post-type-archive-product) :is(.site-content, .ast-container),
+:is(.woocommerce-page, .woocommerce, .single-product, .tax-product_cat, .tax-product_tag) #primary,
+
+.single-product .woocommerce {
+    max-width: 1268px !important;
+    width: 100% !important;
+    margin-inline: auto !important;
+    box-sizing: border-box;
+}
+
+:is(.woocommerce-page, .single-product, .tax-product_cat, .tax-product_tag, .post-type-archive-product) .ast-container {
+    padding-inline: 20px;
+}
+
+@media (max-width: 980px) {
+    :is(.woocommerce-page, .woocommerce, .single-product, .tax-product_cat, .tax-product_tag, .post-type-archive-product) :is(.site-content, .ast-container),
+    :is(.woocommerce-page, .woocommerce, .single-product, .tax-product_cat, .tax-product_tag) #primary,
+    .single-product :is(.woocommerce, .product) {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin-inline: 0 !important;
+        padding-inline: 16px !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+    }
+}

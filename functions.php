@@ -107,6 +107,100 @@ add_action(
 
 /*
  * =========================================
+ * Header CSS
+ * =========================================
+ */
+
+function fr_enqueue_header_styles() {
+
+    $css_path =
+        FR_CHILD_DIR .
+        'assets/css/header.css';
+
+    $version =
+        file_exists( $css_path )
+            ? filemtime( $css_path )
+            : CHILD_THEME_FR_ASTRA_CHILD_VERSION;
+
+    wp_enqueue_style(
+        'fr-header-style',
+        FR_CHILD_URI .
+            'assets/css/header.css',
+        array(
+            'fr-custom-style',
+        ),
+        $version,
+        'all'
+    );
+}
+
+add_action(
+    'wp_enqueue_scripts',
+    'fr_enqueue_header_styles',
+    25
+);
+
+/* Register header navigation */
+add_action('after_setup_theme', function() {
+
+    register_nav_menus([
+        'frp_primary' => 'Flex Rock Primary Navigation',
+    ]);
+
+});
+
+
+/* Header cart quantity */
+function frp_header_cart_count() {
+
+    $count = WC()->cart
+        ? WC()->cart->get_cart_contents_count()
+        : 0;
+
+    echo '<i class="frp-cart-count">'
+        . esc_html($count)
+        . '</i>';
+
+}
+
+
+/* Update header cart quantity via AJAX */
+add_filter('woocommerce_add_to_cart_fragments', function($fragments) {
+
+    ob_start();
+
+    frp_header_cart_count();
+
+    $fragments['.frp-cart-count'] = ob_get_clean();
+
+    return $fragments;
+
+});
+
+
+/* Header scripts */
+add_action('wp_enqueue_scripts', function() {
+
+    $js_path = FR_CHILD_DIR . 'assets/js/header.js';
+
+    wp_enqueue_script(
+        'frp-header',
+        FR_CHILD_URI . 'assets/js/header.js',
+        ['jquery'],
+        file_exists($js_path)
+            ? filemtime($js_path)
+            : CHILD_THEME_FR_ASTRA_CHILD_VERSION,
+        true
+    );
+
+    if (class_exists('WooCommerce')) {
+        wp_enqueue_script('wc-cart-fragments');
+    }
+
+});
+
+/*
+ * =========================================
  * Custom CSS
  * =========================================
  */
